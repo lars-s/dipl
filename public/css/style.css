@@ -16,6 +16,7 @@ html,input,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre
 body {
     padding-top: 60px;
     padding-bottom: 40px;
+	font-family: ccfont;
 }
 
 .zf-green {
@@ -119,4 +120,45 @@ footer p {
 		url('../fonts/ccfont-bold.svg#thesansb7bold') format('svg');
 	font-weight: bold;
 	font-style: normal;
+}
+
+.ccbox {
+	color: grey;
+	background: black;
+	border-top: 4px solid #F60;
+	padding: 10px;
+	float:left;
+}
+
+.ccbox > h2 {
+	font-size:20px;
+	margin-bottom:5px;
+}
+
+.ccbox.mainwrapper {
+	width: 100%;
+}
+
+.left {
+	float:left;
+}
+
+.ccbox > div {
+	padding-right: 10px;
+}
+
+div.recommendation {
+	margin-top: 10px;
+	margin-right: 10px;
+	width: 250px;
+	height: 150px;
+	background-color: #463E3E;
+	color: whitesmoke;
+	cursor: pointer;
+}
+
+div.recommendation > p {
+	padding: 5px;
+	max-height: 150px; 
+	overflow: hidden;
 }
