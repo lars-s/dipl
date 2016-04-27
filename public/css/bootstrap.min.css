@@ -4153,18 +4153,24 @@ textarea.input-group-sm>.input-group-btn>.btn {
    /* border-radius: 4px 4px 0 0*/
 	color: whitesmoke;
 	cursor: pointer;
+	opacity: 0.5;
 }
 
 .nav-tabs>li>a:hover {
     border-color: #eee #eee #ddd
 }
 
+.nav-tabs>li.active>a {
+	opacity:1;
+	background-color: #463E3E;
+}
+	
 .nav-tabs>li.active>a,
 .nav-tabs>li.active>a:hover,
 .nav-tabs>li.active>a:focus {
     color: #FFF;
     cursor: default;
-    background-color: #463E3E;
+    /*background-color: #463E3E; */
     /* border: 1px solid #ddd; */
     border-bottom-color: transparent;
 }
