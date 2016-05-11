@@ -12,16 +12,20 @@ namespace Application\Controller;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 use Application\Entity\Knowledge;
+use DoctrineModule\Stdlib\Hydrator\DoctrineObject as DoctrineHydrator;
 
 class IndexController extends AbstractActionController
 {
     public function indexAction()
     {
     	$em = $this->getServiceLocator()->get('doctrine.entitymanager.orm_default');
+
+    	$query = $em->createQuery('SELECT COUNT(k) FROM \Application\Entity\Knowledge k');
+    	$count = $query->getSingleScalarResult();
     	
-    	$know = $em->getRepository('\Application\Entity\Knowledge')->findBy(array('technology' => "javascript"));
+    	$recentPosts = null;
     	
-        return new ViewModel(["knows" => $know]);
+        return new ViewModel(["currentPosts" => $count, "preview" => $recentPosts]);
     }
     
     public function itemAction() {
@@ -33,6 +37,28 @@ class IndexController extends AbstractActionController
     }
     
     public function addItemAction() {
+    	$em = $this->getServiceLocator()->get('doctrine.entitymanager.orm_default');
+    	
+    	if ($this->getRequest()->isPost()) {
+    		$hydrator = new DoctrineHydrator($em);
+			$item = new Knowledge();
+			$info = $this->getRequest()->getPost();
+			$data = array(
+				"content" => $info->content,
+				"technology" => $info->technology,
+				"company" => $info->company
+			);
+			
+			$item = $hydrator->hydrate($data, $item);
+			
+			$em->persist($item);
+			$em->flush();
+    	}
+    	    	
+    	return new ViewModel();
+    }
+    
+    public function resultsAction() {
     	return new ViewModel();
     }
 }

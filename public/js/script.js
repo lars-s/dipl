@@ -4,6 +4,10 @@ $(".nav li a").on("click", function() {
 });
 
 
-$(".ccbox.mainwrapper").on("click", ".recommendations-wrapper", function() {
-	window.location.href = $(this).data('link') ;
+$(".main.container").on("click", ".recommendations-wrapper, .linkbox", function() {
+	var link = $(this).data('link');
+	
+	if (link) {
+		window.location.href = $(this).data('link') ;	
+	}
 })

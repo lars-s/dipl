@@ -54,8 +54,26 @@ class Knowledge {
 	 * 
 	 */
 	protected $tags;
+
+	/**
+	 * @var datetime
+	 *
+	 * @ORM\Column(name="created", type="datetime", nullable=false)
+	 * @Annotation\Exclude()
+	 */
+	protected $created;
+	
+	/**
+	 * @var datetime
+	 *
+	 * @ORM\Column(name="updated", type="datetime", nullable=false)
+	 * @Annotation\Exclude()
+	 */
+	protected $updated;
 	
 	public function __construct() {
+		$this->created = new \DateTime("now");
+		$this->updated = new \DateTime("now");
 		$this->tags = new ArrayCollection();
 	}
 	/**

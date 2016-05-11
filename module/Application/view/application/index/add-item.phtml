@@ -1,12 +1,19 @@
 <?php 
-	$k = $this->item;
 ?>
 
 <div class="wrapp">
 
     <div style="margin-bottom:20px;" class="ccbox mainwrapper">
-    	<h2>Neues Wissen hinzufügen</h2>				
-
+    	<h2>Neues Wissen hinzufügen</h2>
+    	
+    	<form action="" method="post" id="new">
+	    	<label>Technologie<input name="technology"></label>	
+	    	<label>Beschreibung<input name="content"></label>
+	    	<label>Firma<input name="company"></label>
+		</form>
+		
+	    <button type="submit" form="new">Speichern</button>	
+		
     </div>
     
 </div>

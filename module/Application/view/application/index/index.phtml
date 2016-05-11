@@ -1,60 +1,20 @@
-<div class="wrapp">
+<?php 
+	$currentPostsNumber = $this->currentPosts;	
+	$recentPostsPreview = $this->preview;
 
-    <div style="margin-bottom:20px;" class="ccbox mainwrapper">
-    	<h2>Problemstellung</h2>
-      	
-      	<div class="left">
-      		<h3>Kunde</h3>
-      			<select>
-					<option>Tincidunt Congue Company</option>
-					<option>Quis Turpis Vitae Company</option>
-					<option>Etiam Corporation</option>
-					<option>optionistique Incorporated</option>
-				</select>
-      	</div>
-      	
-      	<div class="left">
-      		<h3>Produkt</h3>
-      			<select>
-					<option value="1">Webseite</option>
-					<option value="2">Online-Anwendung</option>
-				</select>
-      	</div>
-      	
-      	<div class="left">
-      		<h3>Problem</h3>
-      			<select>
-					<option value="1">Seite kann nicht gefunden werden</option>
-					<option value="2">Schriften werden nicht richtig angezeigt</option>
-					<option value="3">Falsche Formatierung</option>
-					<option value="4">Suchfunktion funktioniert nicht</option>
-				</select>
-		</div>
-    </div>
-        
-    <div class="ccbox mainwrapper">
-    	<h2>Empfehlungen</h2>
-    	<ul class="nav nav-tabs" role="tablist">
-	        <li class="active"><a href="#">JavaScript</a></li>
-	        <li><a href="#">PHP</a></li>
-	        <li><a href="#">CSS</a></li>
-	        <li><a href="#">TYPO3</a></li>
-	        <li><a href="#">Magento</a></li>
-	        <li><a href="#">Wordpress</a></li>
-	        <li><a href="#">HTML</a></li>
-      	</ul>
-      	
-      	<?php
-      		foreach($this->knows as $k) {
-				echo '<div data-link="' . $this->url("item", array("id" => $k->getId())) . '" class="recommendations-wrapper left">';
-				echo '<div class="recommendation">';
-				
-				echo '<p>' . $k->getContent() . '</p>';
-				
-				echo '</div></div>';
-			} 
-      	
-      	?>
-      	
-    </div>
+?>
+
+<div class="wrapp index">
+
+	<div class="linkbox" data-link="<?php echo $this->url("add-item")?>">
+		<h3>Neues Wissen</h3>
+		
+		<p>Hast du etwas beizutragen? <strong>Pflege neues Wissen ein!</strong></p>
+		<br>
+		<br>
+		<p>Beiträge im System: <strong><?php echo $currentPostsNumber ?></strong></p>
+	</div>
+	
+	
+	
 </div>

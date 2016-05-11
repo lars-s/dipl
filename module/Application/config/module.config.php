@@ -39,6 +39,16 @@ return array(
 				        'action'     => 'add-item',
 			        ),
 		        ),
+	        ),    	
+	        'results' => array(
+		        'type' => 'Zend\Mvc\Router\Http\Segment',
+		        'options' => array(
+		        	'route'    => '/results',
+			        'defaults' => array(
+				        'controller' => 'Application\Controller\Index',
+				        'action'     => 'results',
+			        ),
+		        ),
 	        ),   
         ),
  		
