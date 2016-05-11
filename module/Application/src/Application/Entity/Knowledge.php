@@ -5,11 +5,13 @@ namespace Application\Entity;
 use Zend\Form\Annotation;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\ORM\EntityRepository;
 
 /**
  * Knowledge
  * 
  * @ORM\Entity
+ * @ORM\Entity(repositoryClass="KnowledgeRepository")
  * @ORM\Table(name="knowledge")
  */
 class Knowledge {
@@ -138,7 +140,21 @@ class Knowledge {
 	public function getId() {
 		return $this->id;
 	}
-
-	
-	
+		
 }
+Class KnowledgeRepository extends EntityRepository {
+	public function getMostRecentElements($amount = 3) {
+		$returnValue = array();
+		
+		$q = $this->_em->createQuery('SELECT k FROM \Application\Entity\Knowledge k 
+				ORDER BY k.id DESC');
+		$foo = $q->getResult();
+		
+		for ($i = 0; $i < $amount; $i++) {
+			$returnValue[] = $foo[$i];	
+		}
+		
+		return $returnValue;
+	}
+}
+?>

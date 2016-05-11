@@ -15,6 +15,17 @@
 		<p>Beiträge im System: <strong><?php echo $currentPostsNumber ?></strong></p>
 	</div>
 	
-	
+	<div style="position: absolute;bottom: 150px;">
+		<?php foreach ($recentPostsPreview as $k) 
+		{
+			echo '<div data-link="' . $this->url("item", array("id" => $k->getId())) . '" class="linkbox left">';
+			echo '<h3>' . $k->getTechnology() . '</h3>';
+			
+			echo '<p>' . $k->getContent() . '</p>';
+			
+			echo '</div>';
+		}
+		?>
+	</div>
 	
 </div>

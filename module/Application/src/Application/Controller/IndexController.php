@@ -23,12 +23,13 @@ class IndexController extends AbstractActionController
     	$query = $em->createQuery('SELECT COUNT(k) FROM \Application\Entity\Knowledge k');
     	$count = $query->getSingleScalarResult();
     	
-    	$recentPosts = null;
+    	$recentPosts = $em->getRepository('\Application\Entity\Knowledge')->getMostRecentElements(3);
     	
         return new ViewModel(["currentPosts" => $count, "preview" => $recentPosts]);
     }
     
-    public function itemAction() {
+    public function itemAction() 
+    {
     	$em = $this->getServiceLocator()->get('doctrine.entitymanager.orm_default');
     	
     	$item = $em->getRepository('\Application\Entity\Knowledge')->findOneBy(array('id' => $this->params()->fromRoute('id')));
@@ -36,10 +37,12 @@ class IndexController extends AbstractActionController
     	return new ViewModel(["item" => $item]);
     }
     
-    public function addItemAction() {
+    public function addItemAction() 
+    {
     	$em = $this->getServiceLocator()->get('doctrine.entitymanager.orm_default');
     	
-    	if ($this->getRequest()->isPost()) {
+    	if ($this->getRequest()->isPost()) 
+    	{
     		$hydrator = new DoctrineHydrator($em);
 			$item = new Knowledge();
 			$info = $this->getRequest()->getPost();
@@ -58,7 +61,8 @@ class IndexController extends AbstractActionController
     	return new ViewModel();
     }
     
-    public function resultsAction() {
+    public function resultsAction() 
+    {
     	return new ViewModel();
     }
 }

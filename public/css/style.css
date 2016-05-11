@@ -167,6 +167,7 @@ div.linkbox {
     height: 240px;
     position: relative;
 	cursor: pointer;
+	margin-right:15px;
 }
 
 div.linkbox > p {
