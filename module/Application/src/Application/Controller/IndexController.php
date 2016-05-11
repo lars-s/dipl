@@ -11,12 +11,28 @@ namespace Application\Controller;
 
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
+use Application\Entity\Knowledge;
 
 class IndexController extends AbstractActionController
 {
     public function indexAction()
     {
     	$em = $this->getServiceLocator()->get('doctrine.entitymanager.orm_default');
-        return new ViewModel();
+    	
+    	$know = $em->getRepository('\Application\Entity\Knowledge')->findBy(array('technology' => "javascript"));
+    	
+        return new ViewModel(["knows" => $know]);
+    }
+    
+    public function itemAction() {
+    	$em = $this->getServiceLocator()->get('doctrine.entitymanager.orm_default');
+    	
+    	$item = $em->getRepository('\Application\Entity\Knowledge')->findOneBy(array('id' => $this->params()->fromRoute('id')));
+    	
+    	return new ViewModel(["item" => $item]);
+    }
+    
+    public function addItemAction() {
+    	return new ViewModel();
     }
 }

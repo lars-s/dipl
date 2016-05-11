@@ -44,34 +44,17 @@
 	        <li><a href="#">HTML</a></li>
       	</ul>
       	
-      	<div class="recommendations-wrapper left">
-      		<div class="recommendation">
-      			<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur est sem, cursus vel est a, vehicula vulputate turpis. Etiam et purus est. Vestibulum consequat ex pellentesque feugiat viverra. Aenean fringilla efficitur lacinia. Maecenas efficitur felis eget diam tempus, at imperdiet nisi ullamcorper. Aliquam sit amet eros at purus finibus vestibulum vitae
-      			</p>
-      		</div>
-      	</div>  
-      	    	
-      	<div class="recommendations-wrapper left">
-      		<div class="recommendation">
-      			<p>id nisi. Pellentesque lacinia eget sapien vel molestie. Fusce in quam malesuada, fringilla nisi quis, lobortis turpis. Proin aliquet erat ut magna mattis rhoncus
-      			</p>
-      		</div>
-      	</div>
+      	<?php
+      		foreach($this->knows as $k) {
+				echo '<div data-link="' . $this->url("item", array("id" => $k->getId())) . '" class="recommendations-wrapper left">';
+				echo '<div class="recommendation">';
+				
+				echo '<p>' . $k->getContent() . '</p>';
+				
+				echo '</div></div>';
+			} 
       	
-      	<div class="recommendations-wrapper left">
-      		<div class="recommendation">
-      			<p>Quisque sodales risus et magna ornare, ac sollicitudin nulla accumsan. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Donec et fermentum eros, sed pulvinar elit.
-      			</p>
-      		</div>
-      	</div>
-      	
-      	<div class="recommendations-wrapper left">
-      		<div class="recommendation">
-      			<p>Etiam quis malesuada urna. Suspendisse potenti. Nulla facilisi. Nulla feugiat tellus neque, ut fringilla ipsum pretium sit amet. Integer sed urna et enim
-      			</p>
-      		</div>
-      	</div>
-      	
+      	?>
       	
     </div>
 </div>

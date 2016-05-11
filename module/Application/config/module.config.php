@@ -19,38 +19,29 @@ return array(
                         'action'     => 'index',
                     ),
                 ),
-            ),
-            // The following is a route to simplify getting started creating
-            // new controllers and actions without needing to create a new
-            // module. Simply drop new controllers in, and you can access them
-            // using the path /application/:controller/:action
-            'application' => array(
-                'type'    => 'Literal',
-                'options' => array(
-                    'route'    => '/application',
-                    'defaults' => array(
-                        '__NAMESPACE__' => 'Application\Controller',
-                        'controller'    => 'Index',
-                        'action'        => 'index',
-                    ),
-                ),
-                'may_terminate' => true,
-                'child_routes' => array(
-                    'default' => array(
-                        'type'    => 'Segment',
-                        'options' => array(
-                            'route'    => '/[:controller[/:action]]',
-                            'constraints' => array(
-                                'controller' => '[a-zA-Z][a-zA-Z0-9_-]*',
-                                'action'     => '[a-zA-Z][a-zA-Z0-9_-]*',
-                            ),
-                            'defaults' => array(
-                            ),
-                        ),
-                    ),
-                ),
-            ),
+            ),    	
+	        'item' => array(
+		        'type' => 'Zend\Mvc\Router\Http\Segment',
+		        'options' => array(
+		        	'route'    => '/item[/:id]',
+			        'defaults' => array(
+				        'controller' => 'Application\Controller\Index',
+				        'action'     => 'item',
+			        ),
+		        ),
+	        ),    	
+	        'add-item' => array(
+		        'type' => 'Zend\Mvc\Router\Http\Literal',
+		        'options' => array(
+		        	'route'    => '/add-item',
+			        'defaults' => array(
+				        'controller' => 'Application\Controller\Index',
+				        'action'     => 'add-item',
+			        ),
+		        ),
+	        ),   
         ),
+ 		
     ),
     'service_manager' => array(
         'abstract_factories' => array(

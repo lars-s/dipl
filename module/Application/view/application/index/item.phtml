@@ -1,0 +1,19 @@
+<?php 
+	$k = $this->item;
+?>
+
+<div class="wrapp">
+
+    <div style="margin-bottom:20px;" class="ccbox mainwrapper">
+    	<h2>Wissenseinheit</h2>				
+    	<?php 
+    			echo '<div data-link="' . $this->url("item", array("id" => $k->getId())) . '" class="recommendations-wrapper left">';
+				echo '<div class="recommendation">';
+				
+				echo '<p>' . $k->getContent() . '</p>';
+				
+				echo '</div></div>';
+		?>
+    </div>
+    
+</div>
