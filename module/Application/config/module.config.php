@@ -75,6 +75,22 @@ return array(
         'invokables' => array(
             'Application\Controller\Index' => 'Application\Controller\IndexController'
         ),
+    ),    
+    'doctrine' => array(
+    		'driver' => array(
+    				'application_driver' => array(
+    						'class' => 'Doctrine\ORM\Mapping\Driver\AnnotationDriver',
+    						'cache' => 'array',
+    						'paths' => array(
+    							__DIR__ . '/../src/Application/Entity'
+    						)
+    				),    				
+    				'orm_default' => array(
+    						'drivers' => array(
+    								'Application\Entity' =>  'application_driver',
+    						),
+    				),
+    		),
     ),
     'view_manager' => array(
         'display_not_found_reason' => true,
