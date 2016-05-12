@@ -196,3 +196,12 @@ div.recommendation > p {
 	padding: 75px;
     padding-top: 120px;
 }
+
+.ccbox form label {
+	width:230px;
+}
+
+.ccbox form textarea, .ccbox form input {
+	font-family: Arial;
+	padding: 5px;
+}
