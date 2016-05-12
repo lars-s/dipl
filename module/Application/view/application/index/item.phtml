@@ -5,15 +5,22 @@
 <div class="wrapp">
 
     <div style="margin-bottom:20px;" class="ccbox mainwrapper">
-    	<h2>Wissenseinheit</h2>				
+    	<h2><?php echo $k->getTechnology(); ?></h2>				
     	<?php 
-    			echo '<div data-link="' . $this->url("item", array("id" => $k->getId())) . '" class="recommendations-wrapper left">';
+    			echo '<div data-link="' . $this->url("item", array("id" => $k->getId())) . '" class="recommendations-wrapper">';
 				echo '<div class="recommendation">';
 				
 				echo '<p>' . $k->getContent() . '</p>';
 				
 				echo '</div></div>';
 		?>
+		<br>
+    	<h3><?php echo $k->getCompany(); ?></h3>
+    	<br>
+    	<h3><?php echo "Erstellt am " . $k->getCreated()->format("d.m.Y H:i")
+    		. " von <strong>Lars Schröer</strong>"; ?></h3>
+    	<h3><?php echo "Zuletzt geändert am " . $k->getUpdated()->format("d.m.Y H:i") 
+			. " von <strong>Lars Schröer</strong>"; ?></h3>
     </div>
     
 </div>

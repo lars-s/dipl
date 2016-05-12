@@ -140,6 +140,20 @@ class Knowledge {
 	public function getId() {
 		return $this->id;
 	}
+	/**
+	 * @return the $created
+	 */
+	public function getCreated() {
+		return $this->created;
+	}
+
+	/**
+	 * @return the $updated
+	 */
+	public function getUpdated() {
+		return $this->updated;
+	}
+
 		
 }
 Class KnowledgeRepository extends EntityRepository {

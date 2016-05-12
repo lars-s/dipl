@@ -150,7 +150,7 @@ footer p {
 div.recommendation {
 	margin-top: 10px;
 	margin-right: 10px;
-	width: 250px;
+	width: 550px;
 	height: 150px;
 	background-color: #463E3E;
 	color: whitesmoke;
@@ -174,7 +174,7 @@ div.linkbox > p {
 	padding: 10px 15px;
 }
 
-div.linkbox > p > strong {
+strong {
 	color: #f60;
 }
 
@@ -204,4 +204,8 @@ div.recommendation > p {
 .ccbox form textarea, .ccbox form input {
 	font-family: Arial;
 	padding: 5px;
+}
+
+.ccbox form .taginputs {
+	width: 437px;
 }
