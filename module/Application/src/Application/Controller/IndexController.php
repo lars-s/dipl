@@ -20,8 +20,7 @@ class IndexController extends AbstractActionController
     {
     	$em = $this->getServiceLocator()->get('doctrine.entitymanager.orm_default');
 
-    	$query = $em->createQuery('SELECT COUNT(k) FROM \Application\Entity\Knowledge k');
-    	$count = $query->getSingleScalarResult();
+    	$count = $em->getRepository('\Application\Entity\Knowledge')->getTotalNumberOfElements();
     	
     	$recentPosts = $em->getRepository('\Application\Entity\Knowledge')->getMostRecentElements(3);
     	
