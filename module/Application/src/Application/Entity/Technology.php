@@ -7,12 +7,12 @@ use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 
 /**
- * Tag
+ * Technology
  * 
  * @ORM\Entity
- * @ORM\Table(name="tag")
+ * @ORM\Table(name="technology")
  */
-class Tag {
+class Technology {
 	
 	/**
 	 * @var integer
@@ -26,37 +26,28 @@ class Tag {
 	protected $id;	
 	
 	/**
-	 * Name des Tags 
-	 * 
 	 * @ORM\Column(nullable=false)
 	 */
 	protected $name;
 
 // 	/**
-// 	 * Beschreibung des Tags, optional
-// 	 *
 // 	 * @ORM\Column(nullable=true)
 // 	 */
 // 	protected $description;
 	
 	/**
-	 *  @ORM\ManyToMany(targetEntity="KnowledgeSuperclass", mappedBy="tags")
+	 *  @ORM\ManyToMany(targetEntity="KnowledgeSuperclass", mappedBy="technologies")
 	 */
 	protected $appliesTo;
 	
 	public function __construct() {
 		$this->appliesTo = new ArrayCollection();
 	}
-	/**
-	 * @return the $name
-	 */
+
 	public function getName() {
 		return $this->name;
 	}
 
-	/**
-	 * @param field_type $name
-	 */
 	public function setName($name) {
 		$this->name = $name;
 	}
@@ -75,26 +66,15 @@ class Tag {
 // 		$this->description = $description;
 // 	}
 
-	/**
-	 * @return the $appliesTo
-	 */
 	public function getAppliesTo() {
 		return $this->appliesTo;
 	}
 
-	/**
-	 * @param field_type $appliesTo
-	 */
 	public function setAppliesTo($appliesTo) {
 		$this->appliesTo = $appliesTo;
 	}
 
-	/**
-	 * @return the $id
-	 */
 	public function getId() {
 		return $this->id;
 	}
-
-	
 }

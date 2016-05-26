@@ -98,6 +98,10 @@ footer p {
     font-weight: bold;
 }
 
+.pagetitle.logout a {
+	color: grey;
+}
+
 .ccfont {
 	font-family: ccfont;	
 }
@@ -159,7 +163,7 @@ div.recommendation {
 
 div.linkbox {
 	color: grey;
-    background: black;
+    background: #2B2727;
     border-top: 6px solid #F60;
     /* padding: 10px; */
     float: left;
@@ -193,8 +197,8 @@ div.recommendation > p {
 }
 
 .wrapp.index {
-	padding: 75px;
-    padding-top: 120px;
+	padding: 3%;
+    padding-top: 4%;
 }
 
 .ccbox form label {
@@ -208,4 +212,16 @@ div.recommendation > p {
 
 .ccbox form .taginputs {
 	width: 437px;
+}
+
+input.search {
+	background: #2B2727 url(../img/search_icon.png) center right 4px no-repeat;
+    position: absolute;
+    top: 3%;
+    right: 4%;
+    font-size: 18px;
+    color: white;
+    padding: 8px;
+	outline: none;
+	width: 250px;
 }

@@ -12,27 +12,43 @@ namespace Application\Controller;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 use Application\Entity\Knowledge;
+use Application\Entity\Tag;
 use DoctrineModule\Stdlib\Hydrator\DoctrineObject as DoctrineHydrator;
+use Application\Entity\Task;
 
 class IndexController extends AbstractActionController
 {
     public function indexAction()
     {
     	$em = $this->getServiceLocator()->get('doctrine.entitymanager.orm_default');
-
-    	$query = $em->createQuery('SELECT COUNT(k) FROM \Application\Entity\Knowledge k');
-    	$count = $query->getSingleScalarResult();
+    	
+    	if ($this->getRequest()->isPost()) 
+    	{
+    		$id = $this->getRequest()->getPost()["id"];
+    		
+    		$user = $em->find('\Application\Entity\User', $id);
+    		
+    		$_SESSION["userId"] = $user->getId();
+    		$_SESSION["user"] = $user->getFirstname();
+    		
+    		return $this->redirect()->toRoute('home');
+    	}
+    	
+    	$count = $em->getRepository('Application\Entity\Knowledge')->getNumberOfKnowledge();
     	
     	$recentPosts = $em->getRepository('\Application\Entity\Knowledge')->getMostRecentElements(3);
     	
-        return new ViewModel(["currentPosts" => $count, "preview" => $recentPosts]);
+    	$openTasks = $em->getRepository('\Application\Entity\Task')->getNumberOfOpenTasks();
+    	
+        return new ViewModel(["currentPosts" => $count, "preview" => $recentPosts,
+			"openTasks" => $openTasks]);
     }
     
     public function itemAction() 
     {
     	$em = $this->getServiceLocator()->get('doctrine.entitymanager.orm_default');
     	
-    	$item = $em->getRepository('\Application\Entity\Knowledge')->findOneBy(array('id' => $this->params()->fromRoute('id')));
+    	$item = $em->getRepository('Application\Entity\Knowledge')->findOneBy(array('id' => $this->params()->fromRoute('id')));
     	
     	return new ViewModel(["item" => $item]);
     }
@@ -52,17 +68,84 @@ class IndexController extends AbstractActionController
 				"company" => $info->company
 			);
 			
-			$item = $hydrator->hydrate($data, $item);
+			$tags = explode(" ", $info->tags);
 			
+			$item = $hydrator->hydrate($data, $item);
 			$em->persist($item);
+			
+			foreach ($tags as $tagText)
+			{
+				$tag = new Tag();
+				
+				$tag->setName($tagText);
+
+				$tag->getAppliesTo()->add($item);
+				$item->getTags()->add($tag);
+				
+				$em->persist($tag);
+			}
+
 			$em->flush();
     	}
     	    	
     	return new ViewModel();
+    }    
+    
+    public function addTaskAction() 
+    {
+    	$em = $this->getServiceLocator()->get('doctrine.entitymanager.orm_default');
+    	
+    	if ($this->getRequest()->isPost()) 
+    	{
+			$info = $this->getRequest()->getPost();
+			
+    		$hydrator = new DoctrineHydrator($em);
+			$item = new Task();
+			$assignee = $em->find('\Application\Entity\User', $info->assignee);
+			
+			$data = array(
+				"content" => $info->content,
+				"technology" => $info->technology,
+				"company" => $info->company,
+				"creator" => "Jeff"
+			);
+			
+			$item = $hydrator->hydrate($data, $item);
+			$item->setAssignedTo($assignee);
+			
+			$assignee->getAssignedTasks()->add($item);
+			
+			$em->persist($item);
+			$em->flush();
+    	}
+    	
+    	$allEmployees = $em->getRepository('\Application\Entity\User')->findAll();
+    	    	
+    	return new ViewModel(array("assignees" => $allEmployees));
     }
     
     public function resultsAction() 
     {
     	return new ViewModel();
+    }
+    
+    public function loginAction() 
+    {
+    	$em = $this->getServiceLocator()->get('doctrine.entitymanager.orm_default');
+    	$q = $em->createQuery('SELECT u from \Application\Entity\User u');
+    	$users_objects = $q->getResult();
+    	
+    	foreach ($users_objects as $user) 
+    	{
+    		$users[$user->getId()] = $user->getFirstname() . " " . $user->getLastname();
+    	}
+    	
+    	return new ViewModel(array("users" => $users));
+    }
+    
+    public function logoutAction()
+    {
+    	session_destroy();
+    	return $this->redirect()->toRoute('login');
     }
 }

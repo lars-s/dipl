@@ -1,0 +1,38 @@
+<?php
+	$a = $this->assignees; 
+?>
+
+<div class="wrapp">
+
+    <div style="margin-bottom:20px;" class="ccbox mainwrapper">
+    	<h2>Aufgabe erstellen</h2>
+    	
+    	<form action="" method="post" id="new">
+	    	<label>Technologie<br><input name="technology"></label>	
+	    	<label>Firma<br><input name="company"></label>
+	    	<br>
+	    	<br>
+	    	<label>Beschreibung<br><textarea rows="5" cols="51" name="content"></textarea></label>
+	    	<br>
+	    	<br>
+	    	<label>Tags<br><input class="taginputs" name="tags"></label>	    	
+	    	<br>
+	    	<br>
+	    	<label>Zuweisen an:</label>
+	    	<select name="assignee">
+	    		<option value="-1">---</option>
+	    	<?php
+	    		foreach ($a as $person) 
+				{
+					echo "<option value=" . $person->getId() . ">" .
+						$person->getFirstname() . " " . $person->getLastname() . "</option>";
+				} 
+	    	?>
+	    	</select>
+		</form>
+		
+	    <br>
+	    <button type="submit" form="new">Wissen speichern</button>	
+    </div>
+    
+</div>

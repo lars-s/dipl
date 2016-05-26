@@ -40,6 +40,16 @@ return array(
 			        ),
 		        ),
 	        ),    	
+	        'add-task' => array(
+		        'type' => 'Zend\Mvc\Router\Http\Literal',
+		        'options' => array(
+		        	'route'    => '/add-task',
+			        'defaults' => array(
+				        'controller' => 'Application\Controller\Index',
+				        'action'     => 'add-task',
+			        ),
+		        ),
+	        ),      	
 	        'results' => array(
 		        'type' => 'Zend\Mvc\Router\Http\Segment',
 		        'options' => array(
@@ -49,7 +59,27 @@ return array(
 				        'action'     => 'results',
 			        ),
 		        ),
-	        ),   
+	        ),  
+	        'login' => array(
+		        'type' => 'Zend\Mvc\Router\Http\Segment',
+		        'options' => array(
+	        		'route'    => '/login',
+	        		'defaults' => array(
+	        				'controller' => 'Application\Controller\Index',
+	        				'action'     => 'login',
+	        		),
+		        ),
+	        ),  
+	        'logout' => array(
+		        'type' => 'Zend\Mvc\Router\Http\Segment',
+		        'options' => array(
+	        		'route'    => '/logout',
+	        		'defaults' => array(
+	        				'controller' => 'Application\Controller\Index',
+	        				'action'     => 'logout',
+	        		),
+		        ),
+	        ),
         ),
  		
     ),

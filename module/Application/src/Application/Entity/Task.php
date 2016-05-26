@@ -4,70 +4,52 @@ namespace Application\Entity;
 
 use Zend\Form\Annotation;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\ORM\EntityRepository;
 
 /**
  * Task
  * Beschreibt eine spezifische Aufgabe. Diese kann einem Angestellten zugewiesen werden
- * 
+ *
  * @ORM\Entity
+ * @ORM\Entity(repositoryClass="TaskRepository")
  * @ORM\Table(name="task")
  */
-class Task {
-	
+class Task extends KnowledgeSuperclass {
 	/**
-	 * @var integer
-	 * 
-	 * @ORM\Column(name="id", type="integer", nullable=false)
-	 * @ORM\Id
-	 * @ORM\GeneratedValue(strategy="IDENTITY")
-	 * 
-     * @Annotation\Attributes({"type":"hidden"})
-     */
-	protected $id;	
-	
-	/**
-	 * Verwendete Technologie(n)
-	 * 
 	 * @ORM\Column(nullable=false)
 	 */
-	protected $technology;	
+	protected $description;	
 	
 	/**
-	 * Beschreibung
-	 * 
 	 * @ORM\Column(nullable=false)
 	 */
-	protected $desc;
-	
-	/**
-	 * Welcher Benutzer hat diese Aufgabe erstellt?
-	 *
-	 * @ORM\Column(nullable=true)
-	 */
-	protected $creator;
-	
-	/**
-	 * @var datetime
-	 *
-	 * @ORM\Column(name="created", type="datetime", nullable=false)
-	 * @Annotation\Exclude()
-	 */
-	protected $created;
-	
-	/**
-	 * @var datetime
-	 *
-	 * @ORM\Column(name="updated", type="datetime", nullable=false)
-	 * @Annotation\Exclude()
-	 */
-	protected $updated;
-	
-	/**
-	 * Wer hat diese Aufgabe zuletzt bearbeitet?
-	 * 
-	 * @ORM\Column(nullable=false)
-	 * 
-	 */
-	protected $changedBy;
-	
+	protected $status;
+
+	public function getDescription() {
+		return $this->description;
+	}
+
+	public function setDescription($description) {
+		$this->description = $description;
+	}
+	public function getStatus() {
+		return $this->status;
+	}
+
+	public function setStatus($status) {
+		$this->status = $status;
+	}
+
 }
+
+Class TaskRepository extends EntityRepository {
+	public function getNumberOfOpenTasks() {
+		$q = $this->_em->createQuery('SELECT COUNT(t) FROM \Application\Entity\Task t WHERE t.status LIKE :status
+			ORDER BY t.id DESC')->setParameter("status", "open");
+		$count = $q->getSingleScalarResult();
+
+		return $count;
+	}
+}
+?>

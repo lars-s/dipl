@@ -1,4 +1,7 @@
-<?php echo $this->doctype(); ?>
+<?php 
+echo $this->doctype();     	
+
+?>
 
 <html lang="en">
     <head>
@@ -32,7 +35,14 @@
                 	<p class="pagetitle ccfont"><a>::system</a></p>
                 </div>
                 <div class="collapse navbar-collapse">
-                    
+                
+                <?php 
+                if (isset($_SESSION["user"])) 
+                {
+                	echo "<p style='float:right' class='pagetitle logout'>Hallo, " . $_SESSION["user"] . "! " .
+                		"[" . "<a href='" . $this->url('logout') . "'>ausloggen</a>" . "]" . "</p>";
+                }
+                ?>
                 </div><!--/.nav-collapse -->
             </div>
         </nav>

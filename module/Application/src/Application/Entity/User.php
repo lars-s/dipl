@@ -4,6 +4,7 @@ namespace Application\Entity;
 
 use Zend\Form\Annotation;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * User
@@ -41,22 +42,10 @@ class User {
 	
 	/**
 	 * Zugewiesene, unerledigte Aufgaben
-	 *
-	 * @ORM\Column(nullable=true)
+	 * @ORM\OneToMany(targetEntity="Task", mappedBy="assignedTo")
 	 */
-	protected $openTasks;
-	
-	/**
-	 * Erledigte Aufgaben
-	 *
-	 * @ORM\Column(nullable=true)
-	 */
-	protected $closedTasks;
-	
-	/**
-	 * 
-	 */
-	
+	protected $assignedTasks;
+
 	/**
 	 * @var datetime
 	 *
@@ -71,6 +60,64 @@ class User {
 	 * @ORM\Column(name="updated", type="datetime", nullable=false)
 	 * @Annotation\Exclude()
 	 */
-	protected $updated;
+	protected $updated;	
+
+	/**
+	 * @ORM\OneToMany(targetEntity="KnowledgeSuperclass", mappedBy="author")
+	 */
+	protected $contributions;
+	
+	public function __construct() {
+		$this->created = new \DateTime("now");
+		$this->updated = new \DateTime("now");
+		$this->assignedTasks = new ArrayCollection();
+		$this->contributions = new ArrayCollection();
+	}
+	
+	public function getId() {
+		return $this->id;
+	}
+
+	public function getFirstname() {
+		return $this->firstname;
+	}
+
+	public function getLastname() {
+		return $this->lastname;
+	}
+
+	public function getAssignedTasks() {
+		return $this->assignedTasks;
+	}
+
+	public function getCreated() {
+		return $this->created;
+	}
+
+	public function getUpdated() {
+		return $this->updated;
+	}
+	
+	public function getContributions() {
+		return $this->contributions;
+	}
+	
+	public function setFirstname($firstname) {
+		$this->firstname = $firstname;
+	}
+
+	public function setLastname($lastname) {
+		$this->lastname = $lastname;
+	}
+
+	public function setAssignedTasks($assignedTasks) {
+		$this->assignedTasks = $assignedTasks;
+	}
+
+	public function setContributions($contributions) {
+		$this->contributions = $contributions;
+	}
+
+
 	
 }

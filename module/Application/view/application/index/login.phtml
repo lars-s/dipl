@@ -1,0 +1,22 @@
+<?php 
+use Zend\Form\Element\Select;
+?>
+
+<div class="wrapp">
+
+    <div style="margin-bottom:20px;" class="ccbox mainwrapper">
+    	<form action="./" method="post">
+		<?php
+		$element = new Select("id");
+		$element->setValueOptions($this->users);
+		$element->setLabel("Einloggen als:");
+		
+		echo $this->formlabel($element);
+		echo "<br>";
+		echo $this->formselect($element);
+		echo "<br>";
+		echo "<input type='submit' name='Benutzer' value='Anmelden'>";
+		?>
+		</form>
+    </div>
+</div>
