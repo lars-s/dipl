@@ -39,9 +39,10 @@ Class KnowledgeRepository extends EntityRepository {
 				ORDER BY k.id DESC');
 		$foo = $q->getResult();
 		
-		if (count($foo) < $amount)
-		{
-			$amount = count($foo);
+		$amount = min($amount, $this->getTotalNumberOfElements());
+		
+		for ($i = 0; $i < $amount; $i++) {
+			$returnValue[] = $foo[$i];	
 		}
 		
 		for ($i = 0; $i < $amount; $i++) {
@@ -57,6 +58,11 @@ Class KnowledgeRepository extends EntityRepository {
 		$count = $q->getSingleScalarResult();
 
 		return $count;
+	}
+	
+	public function getTotalNumberOfElements() {
+		$q = $this->_em->createQuery('SELECT COUNT(k) FROM \Application\Entity\Knowledge k');
+		return $q->getSingleScalarResult();
 	}
 }
 

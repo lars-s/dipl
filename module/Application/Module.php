@@ -15,7 +15,7 @@ use Zend\Mvc\MvcEvent;
 class Module
 {
     public function onBootstrap(MvcEvent $e)
-    {
+    {    	
     	session_start();
     	$e->getApplication()->getEventManager()->getSharedManager()->attach('Zend\Mvc\Controller\AbstractActionController', 'dispatch', function($e) {
     		$controller = $e->getTarget();
@@ -44,10 +44,5 @@ class Module
                 ),
             ),
         );
-    }
-    
-    public function preDispatch()
-    {
-	
     }
 }

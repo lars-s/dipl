@@ -21,7 +21,6 @@ class IndexController extends AbstractActionController
     public function indexAction()
     {
     	$em = $this->getServiceLocator()->get('doctrine.entitymanager.orm_default');
-    	
     	if ($this->getRequest()->isPost()) 
     	{
     		$id = $this->getRequest()->getPost()["id"];
@@ -35,6 +34,8 @@ class IndexController extends AbstractActionController
     	}
     	
     	$count = $em->getRepository('Application\Entity\Knowledge')->getNumberOfKnowledge();
+
+    	$count = $em->getRepository('\Application\Entity\Knowledge')->getTotalNumberOfElements();
     	
     	$recentPosts = $em->getRepository('\Application\Entity\Knowledge')->getMostRecentElements(3);
     	
