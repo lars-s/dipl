@@ -57,6 +57,7 @@ class IndexController extends AbstractActionController
     public function addItemAction() 
     {
     	$em = $this->getServiceLocator()->get('doctrine.entitymanager.orm_default');
+		$user = $em->find('\Application\Entity\User', $_SESSION["userId"]);
     	
     	if ($this->getRequest()->isPost()) 
     	{
@@ -64,14 +65,14 @@ class IndexController extends AbstractActionController
 			$item = new Knowledge();
 			$info = $this->getRequest()->getPost();
 			$data = array(
-				"content" => $info->content,
-				"technology" => $info->technology,
-				"company" => $info->company
+				"content" => $info->content
 			);
 			
 			$tags = explode(" ", $info->tags);
 			
 			$item = $hydrator->hydrate($data, $item);
+			$item->setAuthor($user);
+			
 			$em->persist($item);
 			
 			foreach ($tags as $tagText)

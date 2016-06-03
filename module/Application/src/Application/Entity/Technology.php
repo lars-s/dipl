@@ -30,16 +30,6 @@ class Technology {
 	 */
 	protected $name;
 
-// 	/**
-// 	 * @ORM\Column(nullable=true)
-// 	 */
-// 	protected $description;
-	
-	/**
-	 *  @ORM\ManyToMany(targetEntity="KnowledgeSuperclass", mappedBy="technologies")
-	 */
-	protected $appliesTo;
-	
 	public function __construct() {
 		$this->appliesTo = new ArrayCollection();
 	}
@@ -65,14 +55,6 @@ class Technology {
 // 	public function setDescription($description) {
 // 		$this->description = $description;
 // 	}
-
-	public function getAppliesTo() {
-		return $this->appliesTo;
-	}
-
-	public function setAppliesTo($appliesTo) {
-		$this->appliesTo = $appliesTo;
-	}
 
 	public function getId() {
 		return $this->id;

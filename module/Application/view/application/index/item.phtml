@@ -5,7 +5,7 @@
 <div class="wrapp">
 
     <div style="margin-bottom:20px;" class="ccbox mainwrapper">
-    	<h2><?php echo $k->getTechnology(); ?></h2>				
+    	<h2><?php echo $k->getTechnology()->getName(); ?></h2>				
     	<?php 
     			echo '<div data-link="' . $this->url("item", array("id" => $k->getId())) . '" class="recommendations-wrapper">';
 				echo '<div class="recommendation">';
@@ -15,7 +15,10 @@
 				echo '</div></div>';
 		?>
 		<br>
-    	<h3><?php echo $k->getCompany(); ?></h3>
+    	<h3><?php foreach ($k->getCompany() as $c) {
+    			echo $c->getName(); 
+    		}?>
+    	</h3>
     	<br>
     	<h3><?php echo "Erstellt am " . $k->getCreated()->format("d.m.Y H:i")
     		. " von <strong>Lars Schröer</strong>"; ?></h3>

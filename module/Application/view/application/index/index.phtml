@@ -32,7 +32,7 @@
 		<?php foreach ($recentPostsPreview as $k) 
 		{
 			echo '<div data-link="' . $this->url("item", array("id" => $k->getId())) . '" class="linkbox left">';
-			echo '<h3>' . $k->getTechnology() . '</h3>';
+			echo '<h3>' . $k->getTechnology()->getName() . '</h3>';
 			
 			echo '<p>' . $k->getContent() . '</p>';
 			

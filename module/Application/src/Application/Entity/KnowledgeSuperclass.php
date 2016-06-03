@@ -36,8 +36,8 @@ class KnowledgeSuperclass {
 	protected $company;
 
 	/**
-	 * @ORM\ManyToMany(targetEntity="Technology", inversedBy="appliesTo")
-	 * @ORM\JoinTable(name="tech_elements") 
+	 * @ORM\ManyToOne(targetEntity="Technology")
+	 * @ORM\JoinColumn(name="technology", referencedColumnName="id")
 	 */
 	protected $technology;
 	
@@ -149,6 +149,14 @@ class KnowledgeSuperclass {
 	public function getUpdated() {
 		return $this->updated;
 	}
+	public function getAuthor() {
+		return $this->author;
+	}
+
+	public function setAuthor($author) {
+		$this->author = $author;
+	}
+
 
 		
 }
