@@ -14,7 +14,7 @@ html,input,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre
 }
 
 body {
-    padding-top: 60px;
+    padding-top: 52px;
     padding-bottom: 40px;
 	font-family: ccfont;
 }
@@ -58,9 +58,6 @@ div.main.container {
 	-moz-background-size: cover;
 	-o-background-size: cover;
 	background-size: cover;;
-	position: absolute;
-	top:51px;
-	bottom: 10px;
 	width: 100%;
 	padding-top: 20px;
 }

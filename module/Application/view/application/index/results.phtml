@@ -3,12 +3,33 @@
 	$tech = $this->technology;
 	$cTech = count($tech);
 	
+	$tagItems = $this->tagItems;
+	$tag = $this->tag;
+	$cTag = count($tag);
 ?>
 
 <div class="wrapp">
 
 <?php 
 if ($cTech) {
+    echo "<div class='ccbox mainwrapper'>";
+    	echo "<h2>Ergebnisse für '<strong>" . $tech->getName() . "'</strong></h2>";
+      	
+      	foreach($techItems as $k) {
+			echo "<div data-link='" . $this->url('item', array('id' => $k->getId())) . "' class='recommendations-wrapper left'>";
+			echo "<div class='recommendation'>";
+			
+			echo "<p>" . $k->getContent() . "</p>";
+			
+			echo "</div></div>";
+		}
+      	      	
+    echo "</div>";
+}
+?>
+
+<?php 
+if ($cTag) {
     echo "<div class='ccbox mainwrapper'>";
     	echo "<h2>Ergebnisse</h2>";
     	echo "<ul class='nav nav-tabs' role='tablist'>";
@@ -22,10 +43,9 @@ if ($cTech) {
 			echo "<p>" . $k->getContent() . "</p>";
 			
 			echo "</div></div>";
-		} 
+		}
       	      	
     echo "</div>";
 }
 ?>
-
 </div>
