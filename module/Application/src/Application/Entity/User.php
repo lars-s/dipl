@@ -5,12 +5,14 @@ namespace Application\Entity;
 use Zend\Form\Annotation;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\ORM\EntityRepository;
 
 /**
  * User
  * Beschreibt einen Angestellten
  * 
  * @ORM\Entity
+ * @ORM\Entity(repositoryClass="UserRepository")
  * @ORM\Table(name="user")
  */
 class User {
@@ -42,7 +44,7 @@ class User {
 	
 	/**
 	 * Zugewiesene, unerledigte Aufgaben
-	 * @ORM\OneToMany(targetEntity="Task", mappedBy="assignedTo")
+	 * @ORM\OneToMany(targetEntity="Task", mappedBy="assignee")
 	 */
 	protected $assignedTasks;
 
@@ -116,8 +118,13 @@ class User {
 
 	public function setContributions($contributions) {
 		$this->contributions = $contributions;
-	}
-
-
+	}	
 	
+	public function getFullname() {
+		return $this->firstname . " " . $this->lastname;
+	}
+}
+
+Class UserRepository extends EntityRepository {
+
 }

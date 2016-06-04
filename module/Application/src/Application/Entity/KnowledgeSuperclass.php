@@ -30,8 +30,8 @@ class KnowledgeSuperclass {
 	protected $id;
 	
 	/**
-	 * @ORM\ManyToMany(targetEntity="Company", inversedBy="appliesTo")
-	 * @ORM\JoinTable(name="company_elements") 
+	 * @ORM\ManyToOne(targetEntity="Company") 
+	 * @ORM\JoinColumn(name="company", referencedColumnName="id")
 	 */
 	protected $company;
 
@@ -78,7 +78,11 @@ class KnowledgeSuperclass {
 	 * @return the $company
 	 */
 	public function getCompany() {
-		return $this->company;
+		if ($this->company) {
+			return $this->company;
+		} else {
+			return new Company();
+		}
 	}
 
 	/**
@@ -92,7 +96,11 @@ class KnowledgeSuperclass {
 	 * @return the $technology
 	 */
 	public function getTechnology() {
-		return $this->technology;
+		if ($this->technology) {
+			return $this->technology;
+		} else {
+			return new Technology();
+		}
 	}
 
 	/**

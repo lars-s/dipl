@@ -29,6 +29,11 @@ class Technology {
 	 * @ORM\Column(nullable=false)
 	 */
 	protected $name;
+	
+	/**
+	 *  @ORM\OneToMany(targetEntity="KnowledgeSuperclass", mappedBy="technology")
+	 */
+	protected $appliesTo;
 
 	public function __construct() {
 		$this->appliesTo = new ArrayCollection();
@@ -42,6 +47,7 @@ class Technology {
 		$this->name = $name;
 	}
 
+	
 // 	/**
 // 	 * @return the $description
 // 	 */
@@ -59,4 +65,12 @@ class Technology {
 	public function getId() {
 		return $this->id;
 	}
+	public function getAppliesTo() {
+		return $this->appliesTo;
+	}
+
+	public function setAppliesTo($appliesTo) {
+		$this->appliesTo = $appliesTo;
+	}
+
 }

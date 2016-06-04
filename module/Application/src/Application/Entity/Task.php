@@ -22,9 +22,16 @@ class Task extends KnowledgeSuperclass {
 	protected $description;	
 	
 	/**
+	 * 0 = geschlossen, 1 = offen
 	 * @ORM\Column(nullable=false)
 	 */
 	protected $status;
+	
+	/**
+	 * @ORM\ManyToOne(targetEntity="User")
+	 * @ORM\JoinColumn(name="assignee", referencedColumnName="id")
+	 */
+	protected $assignee;
 
 	public function getDescription() {
 		return $this->description;
@@ -40,13 +47,20 @@ class Task extends KnowledgeSuperclass {
 	public function setStatus($status) {
 		$this->status = $status;
 	}
+	public function getAssignee() {
+		return $this->assignee;
+	}
+
+	public function setAssignee($assignee) {
+		$this->assignee = $assignee;
+	}
 
 }
 
 Class TaskRepository extends EntityRepository {
 	public function getNumberOfOpenTasks() {
 		$q = $this->_em->createQuery('SELECT COUNT(t) FROM \Application\Entity\Task t WHERE t.status LIKE :status
-			ORDER BY t.id DESC')->setParameter("status", "open");
+			ORDER BY t.id DESC')->setParameter("status", "1");
 		$count = $q->getSingleScalarResult();
 
 		return $count;

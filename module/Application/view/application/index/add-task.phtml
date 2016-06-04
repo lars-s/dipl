@@ -1,5 +1,19 @@
+<script>
+	var tags = [];
+<?php 
+	$tags = $this->tags;
+	
+	// Create a JS array with the tag data for the auto complete feature
+	foreach ($tags as $c) { 
+		?> tags.push( "<?=$c->getName()?>" ); 
+	<?php 
+	}
+	?>
+</script>
 <?php
 	$a = $this->assignees; 
+	$t = $this->technologies;
+	$c = $this->companies;
 ?>
 
 <div class="wrapp">
@@ -8,14 +22,39 @@
     	<h2>Aufgabe erstellen</h2>
     	
     	<form action="" method="post" id="new">
-	    	<label>Technologie<br><input name="technology"></label>	
-	    	<label>Firma<br><input name="company"></label>
+    		<label>Firma</label>
+	    	<select name="company">
+	    		<option value="-1">---</option>
+	    	<?php
+	    		foreach ($c as $company) 
+				{
+					echo "<option value=" . $company->getId() . ">" .
+						$company->getName() . "</option>";
+				} 
+	    	?>
+	    	</select>	    	
+	    	    	
+	    	<br>
+	    	
+    		<label>Technologie</label>
+	    	<select name="technology">
+	    		<option value="-1">---</option>
+	    	<?php
+	    		foreach ($t as $technology) 
+				{
+					echo "<option value=" . $technology->getId() . ">" .
+						$technology->getName() . "</option>";
+				} 
+	    	?>
+	    	</select>	
+	    	
+	    	<br>
 	    	<br>
 	    	<br>
 	    	<label>Beschreibung<br><textarea rows="5" cols="51" name="content"></textarea></label>
 	    	<br>
 	    	<br>
-	    	<label>Tags<br><input class="taginputs" name="tags"></label>	    	
+	    	<label>Tags<br><input id="tags" class="taginputs" name="tags"></label>	    	
 	    	<br>
 	    	<br>
 	    	<label>Zuweisen an:</label>
@@ -34,5 +73,6 @@
 	    <br>
 	    <button type="submit" form="new">Wissen speichern</button>	
     </div>
-    
 </div>
+<?php  $this->headScript()
+            ->appendFile($this->basePath() . '/js/jquery-ui.js')?>

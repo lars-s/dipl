@@ -64,10 +64,10 @@ class Technology extends \Application\Entity\Technology implements \Doctrine\ORM
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return array('__isInitialized__', 'id', 'name');
+            return array('__isInitialized__', 'id', 'name', 'appliesTo');
         }
 
-        return array('__isInitialized__', 'id', 'name');
+        return array('__isInitialized__', 'id', 'name', 'appliesTo');
     }
 
     /**
@@ -208,6 +208,28 @@ class Technology extends \Application\Entity\Technology implements \Doctrine\ORM
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'getId', array());
 
         return parent::getId();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getAppliesTo()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getAppliesTo', array());
+
+        return parent::getAppliesTo();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setAppliesTo($appliesTo)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setAppliesTo', array($appliesTo));
+
+        return parent::setAppliesTo($appliesTo);
     }
 
 }

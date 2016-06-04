@@ -2,13 +2,15 @@
 	$currentPostsNumber = $this->currentPosts;	
 	$recentPostsPreview = $this->preview;
 	$currentOpenTasksNumber = $this->openTasks;
+	$myOpenTasks = $this->myOpenTasks;
+	$countOfMyOpenTasks = count($myOpenTasks);
 
 ?>
 
 <div class="wrapp index">
 
 	<div class="linkbox" data-link="<?php echo $this->url("add-item")?>">
-		<h3>Neues Wissen</h3>
+		<h3>Wissen eintragen</h3>
 		
 		<p>Hast du etwas beizutragen? <br> <strong>Pflege neues Wissen ein!</strong></p>
 		<br>
@@ -17,7 +19,7 @@
 	</div>
 	
 	<div class="linkbox" data-link="<?php echo $this->url("add-task")?>">
-		<h3>Neue Aufgabe</h3>
+		<h3>Aufgabe stellen</h3>
 		
 		<p>Gibt es was zu tun? <br> <strong>Erstelle eine Aufgabe!</strong></p>
 		<br>
@@ -25,8 +27,10 @@
 		<p>Offene Aufgaben: <strong><?php echo $currentOpenTasksNumber ?></strong></p>
 	</div>
 	
-	<input class="search" placeholder="Suchen">
-	
+	<form method="POST" id="suchen" name="suche" action="results" >
+		<input name="query" class="search" placeholder="Suchen">
+		<input type="submit" value="">
+	</form>
 	
 	<div style="position: absolute;bottom: 2%;">
 		<?php foreach ($recentPostsPreview as $k) 

@@ -298,4 +298,15 @@ class User extends \Application\Entity\User implements \Doctrine\ORM\Proxy\Proxy
         return parent::setContributions($contributions);
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    public function getFullname()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getFullname', array());
+
+        return parent::getFullname();
+    }
+
 }

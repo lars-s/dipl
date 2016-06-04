@@ -31,6 +31,8 @@ class IndexController extends AbstractActionController
     		$_SESSION["user"] = $user->getFirstname();
     		
     		return $this->redirect()->toRoute('home');
+    	} else {
+    		$user = $em->find('\Application\Entity\User', $_SESSION["userId"]);
     	}
     	
     	$count = $em->getRepository('Application\Entity\Knowledge')->getNumberOfKnowledge();
@@ -41,8 +43,10 @@ class IndexController extends AbstractActionController
     	
     	$openTasks = $em->getRepository('\Application\Entity\Task')->getNumberOfOpenTasks();
     	
+    	$myOpenTasks = $user->getAssignedTasks();
+    	
         return new ViewModel(["currentPosts" => $count, "preview" => $recentPosts,
-			"openTasks" => $openTasks]);
+			"openTasks" => $openTasks, "myOpenTasks" => $myOpenTasks ]);
     }
     
     public function itemAction() 
@@ -65,32 +69,46 @@ class IndexController extends AbstractActionController
 			$item = new Knowledge();
 			$info = $this->getRequest()->getPost();
 			$data = array(
-				"content" => $info->content
+				"content" => $info->content,
+				"technology" => $em->find('\Application\Entity\Technology', $info->technology),
+				"company" => $em->find('\Application\Entity\Company', $info->company)
 			);
-			
-			$tags = explode(" ", $info->tags);
 			
 			$item = $hydrator->hydrate($data, $item);
 			$item->setAuthor($user);
 			
 			$em->persist($item);
-			
+
+			$tags = explode(",", strtolower($info->tags));
 			foreach ($tags as $tagText)
 			{
-				$tag = new Tag();
+				$tagText = trim($tagText);
+				$existingTag = $em->getRepository('\Application\Entity\Tag')->findOneBy(['name' => $tagText]);
 				
-				$tag->setName($tagText);
+				if (!$existingTag) {
+					$tag = new Tag();
+						
+					$tag->setName($tagText);
+				} else {
+					$tag = $existingTag;
+				}
 
 				$tag->getAppliesTo()->add($item);
 				$item->getTags()->add($tag);
-				
+					
 				$em->persist($tag);
-			}
-
+			}				
+			
 			$em->flush();
     	}
-    	    	
-    	return new ViewModel();
+
+    	$allEmployees = $em->getRepository('\Application\Entity\User')->findBy([], ['lastname' => 'ASC']);
+    	$allCompanies = $em->getRepository('\Application\Entity\Company')->findBy([], ['name' => 'ASC']);
+    	$allTechnologies = $em->getRepository('\Application\Entity\Technology')->findBy([], ['name' => 'ASC']);
+    	$allTags = $em->getRepository('\Application\Entity\Tag')->getNamesAndIds();
+    	
+    	return new ViewModel(array("assignees" => $allEmployees, "companies" => $allCompanies,
+    			"technologies" => $allTechnologies, "tags" => $allTags ));
     }    
     
     public function addTaskAction() 
@@ -106,14 +124,36 @@ class IndexController extends AbstractActionController
 			$assignee = $em->find('\Application\Entity\User', $info->assignee);
 			
 			$data = array(
-				"content" => $info->content,
-				"technology" => $info->technology,
-				"company" => $info->company,
-				"creator" => "Jeff"
+				"description" => $info->content,
+				"technology" => $em->find('\Application\Entity\Technology', $info->technology),
+				"company" => $em->find('\Application\Entity\Company', $info->company),
+				"author" => $em->find('\Application\Entity\User', $_SESSION["userId"]),
+				"status" => 1
 			);
 			
 			$item = $hydrator->hydrate($data, $item);
-			$item->setAssignedTo($assignee);
+			$item->setAssignee($assignee);
+
+			$tags = explode(",", strtolower($info->tags));
+						
+    		foreach ($tags as $tagText)
+			{
+				$tagText = trim($tagText);
+				$existingTag = $em->getRepository('\Application\Entity\Tag')->findOneBy(['name' => $tagText]);
+				
+				if (!$existingTag) {
+					$tag = new Tag();
+						
+					$tag->setName($tagText);
+				} else {
+					$tag = $existingTag;
+				}
+
+				$tag->getAppliesTo()->add($item);
+				$item->getTags()->add($tag);
+					
+				$em->persist($tag);
+			}	
 			
 			$assignee->getAssignedTasks()->add($item);
 			
@@ -121,14 +161,44 @@ class IndexController extends AbstractActionController
 			$em->flush();
     	}
     	
-    	$allEmployees = $em->getRepository('\Application\Entity\User')->findAll();
+    	$allEmployees = $em->getRepository('\Application\Entity\User')->findBy([], ['lastname' => 'ASC']);
+    	$allCompanies = $em->getRepository('\Application\Entity\Company')->findBy([], ['name' => 'ASC']);
+    	$allTechnologies = $em->getRepository('\Application\Entity\Technology')->findBy([], ['name' => 'ASC']);
+    	$allTags = $em->getRepository('\Application\Entity\Tag')->getNamesAndIds();
     	    	
-    	return new ViewModel(array("assignees" => $allEmployees));
+    	return new ViewModel(array("assignees" => $allEmployees, "companies" => $allCompanies, 
+    			"technologies" => $allTechnologies, "tags" => $allTags ));
     }
     
     public function resultsAction() 
     {
-    	return new ViewModel();
+    	if ($this->getRequest()->isPost())
+    	{
+    		$em = $this->getServiceLocator()->get('doctrine.entitymanager.orm_default');
+    		$query = $this->getRequest()->getPost()->query;
+    		$return = array("query" => $query);
+
+    		
+    		// IS TECHNOLOGY?
+    		$result = $em->getRepository('\Application\Entity\Technology')->findOneBy(["name" => $query]);
+    		if ($result) {
+    			$return["technology"] = $result;
+    			$return["technologyItems"] = $result->getAppliesTo();
+    		} 
+    		
+    		// IS TAG?
+    		$results = $em->getRepository('\Application\Entity\Tag')->findBy(["name" => $query]);
+    		if ($results) {
+    			$return["tags"] = $results;
+    		}
+    		
+    		// IS COMPANY?
+    		
+    		
+    		return new ViewModel($return);
+    	} else {
+    		return $this->redirect()->toRoute('home');
+    	}
     }
     
     public function loginAction() 

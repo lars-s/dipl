@@ -5,11 +5,13 @@ namespace Application\Entity;
 use Zend\Form\Annotation;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\ORM\EntityRepository;
 
 /**
  * Tag
  * 
  * @ORM\Entity
+ * @ORM\Entity(repositoryClass="TagRepository")
  * @ORM\Table(name="tag")
  */
 class Tag {
@@ -95,6 +97,13 @@ class Tag {
 	public function getId() {
 		return $this->id;
 	}
+}
 
+Class TagRepository extends EntityRepository 
+{
+	public function getNamesAndIds() {
+		$query ='SELECT partial c.{id, name} FROM Application\Entity\Tag c ORDER BY c.name ASC';
 	
+		return $this->_em->createQuery($query)->getResult();
+	}
 }

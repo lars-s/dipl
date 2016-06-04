@@ -7,7 +7,7 @@
     <div style="margin-bottom:20px;" class="ccbox mainwrapper">
     	<h2><?php echo $k->getTechnology()->getName(); ?></h2>				
     	<?php 
-    			echo '<div data-link="' . $this->url("item", array("id" => $k->getId())) . '" class="recommendations-wrapper">';
+    			echo '<div class="recommendations-wrapper">';
 				echo '<div class="recommendation">';
 				
 				echo '<p>' . $k->getContent() . '</p>';
@@ -15,15 +15,27 @@
 				echo '</div></div>';
 		?>
 		<br>
-    	<h3><?php foreach ($k->getCompany() as $c) {
-    			echo $c->getName(); 
-    		}?>
+    	<h3>
+    	<?php 
+    	if ($k->getCompany())
+    	{
+    		echo $k->getCompany()->getName();
+    	}
+    	?>
     	</h3>
     	<br>
-    	<h3><?php echo "Erstellt am " . $k->getCreated()->format("d.m.Y H:i")
-    		. " von <strong>Lars Schröer</strong>"; ?></h3>
-    	<h3><?php echo "Zuletzt geändert am " . $k->getUpdated()->format("d.m.Y H:i") 
-			. " von <strong>Lars Schröer</strong>"; ?></h3>
+    	<?php 
+    		echo "<h3>Erstellt am " . $k->getCreated()->format("d.m.Y H:i")
+    			. " von <strong>" . $k->getAuthor()->getFullname() .  "</strong></h3>"; 
+    	?>
+    		
+    	<?php 
+    	if ($k->getUpdated() != $k->getCreated() )
+    	{
+    		echo "<h3>Zuletzt geändert am " . $k->getUpdated()->format("d.m.Y H:i")
+    		. " von <strong>Lars Schröer</strong></h3>";
+    	}	
+    	?>
     </div>
     
 </div>

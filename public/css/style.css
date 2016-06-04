@@ -187,7 +187,7 @@ div.linkbox > h3 {
     bottom: 0px;
     right: 0px;
     opacity: 0.45;
-    font-size: 35px;
+    font-size: 30px;
 }
 
 div.recommendation > p {
@@ -215,6 +215,19 @@ div.recommendation > p {
 }
 
 input.search {
+	background: #2B2727;
+    position: absolute;
+    top: 3%;
+    right: 4%;
+    font-size: 18px;
+    color: white;
+    padding: 8px;
+    outline: none;
+    width: 210px;
+    margin-right: 40px;
+}
+
+input[type="submit"] {
 	background: #2B2727 url(../img/search_icon.png) center right 4px no-repeat;
     position: absolute;
     top: 3%;
@@ -222,6 +235,6 @@ input.search {
     font-size: 18px;
     color: white;
     padding: 8px;
-	outline: none;
-	width: 250px;
+    outline: none;
+    width: 40px;
 }

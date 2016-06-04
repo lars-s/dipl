@@ -44,10 +44,6 @@ Class KnowledgeRepository extends EntityRepository {
 		for ($i = 0; $i < $amount; $i++) {
 			$returnValue[] = $foo[$i];	
 		}
-		
-		for ($i = 0; $i < $amount; $i++) {
-			$returnValue[] = $foo[$i];
-		}
 
 		return $returnValue;
 	}
