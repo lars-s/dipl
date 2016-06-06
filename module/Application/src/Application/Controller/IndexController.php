@@ -53,7 +53,9 @@ class IndexController extends AbstractActionController
     {
     	$em = $this->getServiceLocator()->get('doctrine.entitymanager.orm_default');
     	
-    	$item = $em->getRepository('Application\Entity\Knowledge')->findOneBy(array('id' => $this->params()->fromRoute('id')));
+    	$item = $em->getRepository('Application\Entity\Knowledge')->findOneBy(array('id' => $this->params()->fromRoute('id'))) ?
+    		$em->getRepository('Application\Entity\Knowledge')->findOneBy(array('id' => $this->params()->fromRoute('id'))):
+    		$em->getRepository('Application\Entity\Task')->findOneBy(array('id' => $this->params()->fromRoute('id'))) ;
     	
     	return new ViewModel(["item" => $item]);
     }
@@ -200,6 +202,16 @@ class IndexController extends AbstractActionController
     	} else {
     		return $this->redirect()->toRoute('home');
     	}
+    }
+
+    public function myOpenTasksAction()
+    {
+    	$em = $this->getServiceLocator()->get('doctrine.entitymanager.orm_default');
+    	$user = $em->find('\Application\Entity\User', $_SESSION["userId"]);
+    	 
+    	$tasks = $user->getAssignedTasks();
+    	
+    	return new ViewModel(["myTasks" => $tasks]);
     }
     
     public function loginAction() 

@@ -1,32 +1,48 @@
 <?php 
 	$k = $this->item;
+	
+	if (method_exists($k, "getContent")) {
+		$text = $k->getContent();
+	} else {
+		$text = $k->getDescription();
+	}
+	
 ?>
 
 <div class="wrapp">
 
     <div style="margin-bottom:20px;" class="ccbox mainwrapper">
-    	<h2><?php echo $k->getTechnology()->getName(); ?></h2>				
+    	<h2><?php echo $k->getTechnology()->getName(); ?></h2>	
+    	
+    	<?php 
+    	if (null !== $k->getCompany()) {
+			echo "<h3>" . $k->getCompany()->getName() . "</h3>";
+		}
+    	?>			
     	<?php 
     			echo '<div class="recommendations-wrapper">';
 				echo '<div class="recommendation">';
 				
-				echo '<p>' . $k->getContent() . '</p>';
+				echo '<p>' . $text . '</p>';
 				
 				echo '</div></div>';
 		?>
 		<br>
     	<h3>
     	<?php 
-    	if ($k->getCompany())
-    	{
-    		echo $k->getCompany()->getName();
+
+    	if (null !== $k->getTags()) {
+    		foreach ($k->getTags() as $t) {
+				echo $t->getName() . " ";
+			}
     	}
     	?>
     	</h3>
     	<br>
+    	<br>
     	<?php 
-    		echo "<h3>Erstellt am " . $k->getCreated()->format("d.m.Y H:i")
-    			. " von <strong>" . $k->getAuthor()->getFullname() .  "</strong></h3>"; 
+    		echo "<p class='small'>Erstellt am " . $k->getCreated()->format("d.m.Y H:i")
+    			. " von <strong>" . $k->getAuthor()->getFullname() .  "</strong></p>"; 
     	?>
     		
     	<?php 

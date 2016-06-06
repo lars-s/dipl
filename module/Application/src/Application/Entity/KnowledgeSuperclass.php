@@ -111,20 +111,6 @@ class KnowledgeSuperclass {
 	}
 
 	/**
-	 * @return the $content
-	 */
-	public function getContent() {
-		return $this->content;
-	}
-
-	/**
-	 * @param field_type $content
-	 */
-	public function setContent($content) {
-		$this->content = $content;
-	}
-
-	/**
 	 * @return the $tags
 	 */
 	public function getTags() {
@@ -163,10 +149,7 @@ class KnowledgeSuperclass {
 
 	public function setAuthor($author) {
 		$this->author = $author;
-	}
-
-
-		
+	}		
 }
 
 ?>

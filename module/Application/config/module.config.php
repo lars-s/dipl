@@ -59,7 +59,17 @@ return array(
 				        'action'     => 'results',
 			        ),
 		        ),
-	        ),  
+	        ),      	
+	        'my-open-tasks' => array(
+		        'type' => 'Zend\Mvc\Router\Http\Segment',
+		        'options' => array(
+		        	'route'    => '/my-open-tasks',
+			        'defaults' => array(
+				        'controller' => 'Application\Controller\Index',
+				        'action'     => 'myOpenTasks',
+			        ),
+		        ),
+	        ),    
 	        'login' => array(
 		        'type' => 'Zend\Mvc\Router\Http\Segment',
 		        'options' => array(

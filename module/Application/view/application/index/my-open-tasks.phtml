@@ -1,0 +1,25 @@
+<?php 
+	$openTasks = $this->myTasks;
+?>
+
+<div class="wrapp">
+
+<?php 
+if ($openTasks) {
+    echo "<div class='ccbox mainwrapper'>";
+    	echo "<h2>Meine Aufgaben</h2>";
+      	
+      	foreach($openTasks as $k) {
+			echo "<div data-link='" . $this->url('item', array('id' => $k->getId())) . "' class='recommendations-wrapper left'>";
+			echo "<div class='recommendation'>";
+			
+			echo "<p>" . $k->getDescription() . "</p>";
+			
+			echo "</div></div>";
+		}
+      	      	
+    echo "</div>";
+}
+?>
+
+</div>

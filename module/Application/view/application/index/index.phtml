@@ -24,8 +24,20 @@
 		<p>Gibt es was zu tun? <br> <strong>Erstelle eine Aufgabe!</strong></p>
 		<br>
 		<br>
-		<p>Offene Aufgaben: <strong><?php echo $currentOpenTasksNumber ?></strong></p>
 	</div>
+	
+	<?php 
+	if ($countOfMyOpenTasks) {
+
+	echo '<div class="linkbox" data-link="' . $this->url("my-open-tasks"). '">';
+		echo "<h3>Offene Aufgaben</h3>";
+		
+		echo "<p>  <br> <strong>Du hast offene Aufgaben!</strong></p>";
+		echo "<br><br>";
+		echo "<p>Offene Aufgaben: <strong>" . $countOfMyOpenTasks . "</strong></p>";
+	echo "</div>";
+	}
+	?>
 	
 	<form method="POST" id="suchen" name="suche" action="results" >
 		<input name="query" class="search" placeholder="Suchen">
