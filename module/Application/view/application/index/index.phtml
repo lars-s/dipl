@@ -3,8 +3,6 @@
 	$recentPostsPreview = $this->preview;
 	$currentOpenTasksNumber = $this->openTasks;
 	$myOpenTasks = $this->myOpenTasks;
-	$countOfMyOpenTasks = count($myOpenTasks);
-
 ?>
 
 <div class="wrapp index">
@@ -27,14 +25,14 @@
 	</div>
 	
 	<?php 
-	if ($countOfMyOpenTasks) {
+	if ($myOpenTasks > 0) {
 
 	echo '<div class="linkbox" data-link="' . $this->url("my-open-tasks"). '">';
 		echo "<h3>Offene Aufgaben</h3>";
 		
 		echo "<p>  <br> <strong>Du hast offene Aufgaben!</strong></p>";
 		echo "<br><br>";
-		echo "<p>Offene Aufgaben: <strong>" . $countOfMyOpenTasks . "</strong></p>";
+		echo "<p>Offene Aufgaben: <strong>" . $myOpenTasks . "</strong></p>";
 	echo "</div>";
 	}
 	?>

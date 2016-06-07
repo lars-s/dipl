@@ -43,7 +43,7 @@ class IndexController extends AbstractActionController
     	
     	$openTasks = $em->getRepository('\Application\Entity\Task')->getNumberOfOpenTasks();
     	
-    	$myOpenTasks = $user->getAssignedTasks();
+    	$myOpenTasks = $em->getRepository('\Application\Entity\User')->getOpenTasksCount($user->getId());
     	
         return new ViewModel(["currentPosts" => $count, "preview" => $recentPosts,
 			"openTasks" => $openTasks, "myOpenTasks" => $myOpenTasks ]);
@@ -53,11 +53,28 @@ class IndexController extends AbstractActionController
     {
     	$em = $this->getServiceLocator()->get('doctrine.entitymanager.orm_default');
     	
+    	if ($this->getRequest()->isPost())
+    	{
+    		$ferrors = array();
+    		$solution = $this->getRequest()->getPost()->solution;
+    		$task = $em->getRepository('Application\Entity\Task')->findOneBy(array('id' => $this->params()->fromRoute('id')));
+    		
+    		if ($solution !== "") 
+    		{
+    			$task->setSolution($solution);
+    			$task->setStatus(0);
+    			$em->flush();
+    			return $this->redirect()->toRoute('my-open-tasks');
+    		} else {
+    			$ferrors[] = "Leerer Lösungstext!";
+    		}
+    	}
+    	
     	$item = $em->getRepository('Application\Entity\Knowledge')->findOneBy(array('id' => $this->params()->fromRoute('id'))) ?
     		$em->getRepository('Application\Entity\Knowledge')->findOneBy(array('id' => $this->params()->fromRoute('id'))):
     		$em->getRepository('Application\Entity\Task')->findOneBy(array('id' => $this->params()->fromRoute('id'))) ;
     	
-    	return new ViewModel(["item" => $item]);
+    	return new ViewModel(["item" => $item, "formErrors" => $ferrors]);
     }
     
     public function addItemAction() 
@@ -209,7 +226,7 @@ class IndexController extends AbstractActionController
     	$em = $this->getServiceLocator()->get('doctrine.entitymanager.orm_default');
     	$user = $em->find('\Application\Entity\User', $_SESSION["userId"]);
     	 
-    	$tasks = $user->getAssignedTasks();
+    	$tasks = $em->getRepository('\Application\Entity\User')->getOpenTasks($user->getId());
     	
     	return new ViewModel(["myTasks" => $tasks]);
     }

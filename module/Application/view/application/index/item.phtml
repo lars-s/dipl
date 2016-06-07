@@ -2,23 +2,35 @@
 	$k = $this->item;
 	
 	if (method_exists($k, "getContent")) {
+		$type = "knowledge";
 		$text = $k->getContent();
 	} else {
+		$type = "task";
 		$text = $k->getDescription();
 	}
+	
+	$ferrors = $this->formErrors;
 	
 ?>
 
 <div class="wrapp">
+	<?php 
+	if ($ferrors) 
+	{
+		echo "<div>" . print_r($ferrors) . "</div>";
+	}
+	?>
 
     <div style="margin-bottom:20px;" class="ccbox mainwrapper">
-    	<h2><?php echo $k->getTechnology()->getName(); ?></h2>	
-    	
+    	<h2>
     	<?php 
+    	echo $k->getTechnology()->getName();
     	if (null !== $k->getCompany()) {
-			echo "<h3>" . $k->getCompany()->getName() . "</h3>";
+			echo " --- " . $k->getCompany()->getName();
 		}
     	?>			
+    	</h2>
+    	
     	<?php 
     			echo '<div class="recommendations-wrapper">';
 				echo '<div class="recommendation">';
@@ -28,16 +40,31 @@
 				echo '</div></div>';
 		?>
 		<br>
+		
     	<h3>
-    	<?php 
-
+    	<?php
     	if (null !== $k->getTags()) {
+			echo "<h3>Tags</h3>";
     		foreach ($k->getTags() as $t) {
 				echo $t->getName() . " ";
 			}
     	}
     	?>
     	</h3>
+    	
+    	<br>
+    	<br>
+    	
+    	<?php 
+    	if ($type == "task" && $k->getStatus()) {
+    		echo "<form method='post' id='solution-form'>";
+	    		echo "<h2><strong>Deine Lösung</strong></h2>";
+	    		echo "<textarea name='solution' rows='5' cols='51'></textarea>";
+	    		echo "<br>";
+	    		echo "<button type='submit' form='solution-form'>Aufgabe abschließen</button>";
+	    	echo "</form>";
+	    }
+	    ?>
     	<br>
     	<br>
     	<?php 

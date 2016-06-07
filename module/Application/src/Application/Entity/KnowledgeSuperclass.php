@@ -12,6 +12,7 @@ use Doctrine\ORM\EntityRepository;
  * 
  * @ORM\Entity
  * @ORM\InheritanceType("SINGLE_TABLE") 
+ * @ORM\Table(name="knowledgesuperclass")
  * @ORM\DiscriminatorColumn(name="discr", type="string")
  * @ORM\DiscriminatorMap({"knowledgeSuperclass" = "KnowledgeSuperclass", "knowledge" = "Knowledge", "task" = "Task"})
  * @ORM\Entity(repositoryClass="KnowledgeRepository")

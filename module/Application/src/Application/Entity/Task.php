@@ -19,10 +19,15 @@ class Task extends KnowledgeSuperclass {
 	/**
 	 * @ORM\Column(nullable=false)
 	 */
-	protected $description;	
+	protected $description;		
 	
 	/**
-	 * 0 = geschlossen, 1 = offen
+	 * @ORM\Column(nullable=true)
+	 */
+	protected $solution;
+	
+	/**
+	 * 0 = erledigt, 1 = offen
 	 * @ORM\Column(nullable=false)
 	 */
 	protected $status;
@@ -54,6 +59,14 @@ class Task extends KnowledgeSuperclass {
 	public function setAssignee($assignee) {
 		$this->assignee = $assignee;
 	}
+	public function getSolution() {
+		return $this->solution;
+	}
+
+	public function setSolution($solution) {
+		$this->solution = $solution;
+	}
+
 
 }
 

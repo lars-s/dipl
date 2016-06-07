@@ -125,6 +125,19 @@ class User {
 	}
 }
 
-Class UserRepository extends EntityRepository {
-
+Class UserRepository extends EntityRepository 
+{
+	public function getOpenTasks($user) {
+		$q = $this->_em->createQuery('SELECT t FROM \Application\Entity\Task t WHERE t.status = 1
+				AND t.assignee = :var')
+		->setParameter("var", "$user");
+		return $q->getResult();
+	}
+	
+	public function getOpenTasksCount($user) {
+		$q = $this->_em->createQuery('SELECT count(t) FROM \Application\Entity\Task t WHERE t.status = 1
+				AND t.assignee = :var')
+		->setParameter("var", "$user");
+		return $q->getSingleScalarResult();
+	}
 }
