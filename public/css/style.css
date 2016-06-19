@@ -1,6 +1,7 @@
 < /* CSS Document */
-ul {
-	padding: 0;
+ol,ul {
+	padding: 0;	
+	list-style: none
 }
 /* Eric Meyer's Reset CSS v2.0 - http://cssreset.com */
 html,input,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td,article,aside,canvas,details,embed,figure,figcaption,footer,header,hgroup,menu,nav,output,ruby,section,summary,time,mark,audio,video
@@ -127,7 +128,7 @@ footer p {
 }
 
 .ccbox {
-	color: grey;
+	color: #ece3e3;
 	background: black;
 	border-top: 4px solid #F60;
 	padding: 10px;
@@ -140,7 +141,10 @@ footer p {
 }
 
 .ccbox.mainwrapper {
-	width: 100%;
+	min-width: 30%;
+	min-height: 300px;
+	overflow: auto;
+    max-height: 600px;	
 }
 
 .left {
@@ -154,11 +158,12 @@ footer p {
 div.recommendation {
 	margin-top: 10px;
 	margin-right: 10px;
-	width: 550px;
-	height: 150px;
+	/*width: 550px;
+	height: 150px;*/
 	background-color: #463E3E;
 	color: whitesmoke;
 	cursor: pointer;
+	max-width: 250px;
 }
 
 div.linkbox {
@@ -191,8 +196,7 @@ div.linkbox > h3 {
 }
 
 div.recommendation > p {
-	padding: 5px;
-	max-height: 150px; 
+	padding: 13px;
 	overflow: hidden;
 }
 
@@ -237,4 +241,27 @@ input+input[type="submit"] {
     padding: 8px;
     outline: none;
     width: 40px;
+}
+
+div.rec-div{
+	float:left;
+	margin-left:10px;
+}
+
+div.rec-div ul {
+	list-style-type: none;	
+}
+
+div.rec-div ul li {
+	display: inline;
+	margin-right: 15px;
+}
+
+ul.rec-list ul {
+	cursor: pointer;
+}
+
+ul.rec-list ul:hover {
+	cursor: pointer;
+	color: #F60;
 }

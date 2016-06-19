@@ -19,11 +19,12 @@
 <div class="wrapp">
 
     <div style="margin-bottom:20px;" class="ccbox mainwrapper">
-    	<h2>Aufgabe erstellen</h2>
+    	<h2><strong>Aufgabe erstellen</strong></h2>
+    	<br>
     	
     	<form action="" method="post" id="new">
     		<label>Firma</label>
-	    	<select name="company">
+	    	<select name="company" class="comp">
 	    		<option value="-1">---</option>
 	    	<?php
 	    		foreach ($c as $company) 
@@ -37,13 +38,12 @@
 	    	<br>
 	    	
     		<label>Technologie</label>
-	    	<select name="technology">
+	    	<select name="technology" class='tech'>
 	    		<option value="-1">---</option>
 	    	<?php
 	    		foreach ($t as $technology) 
 				{
-					echo "<option value=" . $technology->getId() . ">" .
-						$technology->getName() . "</option>";
+					echo "<option value='{$technology->getId()}'>{$technology->getName()}</option>";
 				} 
 	    	?>
 	    	</select>	
@@ -72,7 +72,16 @@
 		
 	    <br>
 	    <button type="submit" form="new">Aufgabe erstellen</button>	
+	    <button type="button" id="getRec" >Empfehlung generieren</button>
     </div>
+    
+	<div class="rec-div ccbox mainwrapper">	    	
+		<h2><strong>Empfehlungen</strong></h2>
+    	<br>
+    	
+		<ul class="rec-list">
+		</ul>
+	</div>
 </div>
 <?php  $this->headScript()
             ->appendFile($this->basePath() . '/js/jquery-ui.js')?>

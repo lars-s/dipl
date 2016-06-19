@@ -47,7 +47,7 @@ class User {
 	 * @ORM\OneToMany(targetEntity="Task", mappedBy="assignee")
 	 */
 	protected $assignedTasks;
-
+	
 	/**
 	 * @var datetime
 	 *
@@ -128,16 +128,69 @@ class User {
 Class UserRepository extends EntityRepository 
 {
 	public function getOpenTasks($user) {
-		$q = $this->_em->createQuery('SELECT t FROM \Application\Entity\Task t WHERE t.status = 1
+		$q = $this->_em->createQuery('SELECT t FROM \Application\Entity\Task t WHERE t.status = 0
 				AND t.assignee = :var')
 		->setParameter("var", "$user");
 		return $q->getResult();
 	}
 	
 	public function getOpenTasksCount($user) {
-		$q = $this->_em->createQuery('SELECT count(t) FROM \Application\Entity\Task t WHERE t.status = 1
+		$q = $this->_em->createQuery('SELECT count(t) FROM \Application\Entity\Task t WHERE t.status = 0
 				AND t.assignee = :var')
 		->setParameter("var", "$user");
 		return $q->getSingleScalarResult();
+	}
+
+	public function getRecommendationForAssignment($tech, $comp, $tags) {
+		$q = $this->_em->createQuery('SELECT u FROM \Application\Entity\User u');
+		$users = $q->getResult();
+				
+		$return = array();
+		foreach ($users as $u) {
+			
+			$foo["score"] = 0;
+			$foo["fullname"] = $u->getFullname();
+			$foo["id"] = $u->getId();
+			
+			$q = $this->_em->createQuery('SELECT k FROM \Application\Entity\Knowledge k WHERE k.status = 1 AND k.author = :var')
+				->setParameter("var", $u->getId());
+			$allKnowledge = $q->getResult();
+			foreach ($allKnowledge as $k) {
+				if ($k->getTechnology() == $tech && $k->getCompany() == $comp && $k->hasTags($tags)) {
+					$foo["score"] += 5;
+					
+				} else if (	$k->getTechnology() == $tech && $k->getCompany() == $comp 
+							|| $k->getTechnology() == $tech && $k->hasTags($tags)
+							|| $k->getCompany() == $comp && $k->hasTags($tags)) {
+					$foo["score"] += 3;
+					
+				} else if ($k->getTechnology() == $tech || $k->getCompany() == $comp || $k->hasTags($tags)) {
+					$foo["score"] += 1;
+				}
+			}
+			
+			$q = $this->_em->createQuery('SELECT t FROM \Application\Entity\Task t WHERE t.status = 1 AND t.assignee = :var')
+			->setParameter("var", $u->getId());
+			$allFinishedTasks = $q->getResult();
+			foreach ($allFinishedTasks as $t) {
+				if ($t->getTechnology() == $tech && $t->getCompany() == $comp && $t->hasTags($tags)) {
+					$foo["score"] += 5;
+					
+				} else if (	$t->getTechnology() == $tech && $t->getCompany() == $comp 
+							|| $t->getTechnology() == $tech && $t->hasTags($tags)
+							|| $t->getCompany() == $comp && $t->hasTags($tags)) {
+					$foo["score"] += 3;
+					
+				} else if ($t->getTechnology() == $tech || $t->getCompany() == $comp || $t->hasTags($tags)) {
+					$foo["score"] += 1;
+				}
+			}
+			if ($foo["score"] > 0) {
+				$return[] = $foo;
+			}
+				
+		}
+	
+		return $return;
 	}
 }

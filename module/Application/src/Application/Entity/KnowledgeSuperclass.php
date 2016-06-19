@@ -41,6 +41,13 @@ class KnowledgeSuperclass {
 	 * @ORM\JoinColumn(name="technology", referencedColumnName="id")
 	 */
 	protected $technology;
+
+	/**
+	 * 0 = offene Aufgabe, sonstwie ungültiges Wissen
+	 * 1 = erledigte Aufgabe, gültiges Wissen
+	 * @ORM\Column(nullable=false)
+	 */
+	protected $status = 1;
 	
 	/**
 	 * @ORM\ManyToMany(targetEntity="Tag", inversedBy="appliesTo")
@@ -146,11 +153,23 @@ class KnowledgeSuperclass {
 	}
 	public function getAuthor() {
 		return $this->author;
+	}	
+	
+	public function getStatus() {
+		return $this->status;
+	}
+
+	public function setStatus($status) {
+		$this->status = $status;
 	}
 
 	public function setAuthor($author) {
 		$this->author = $author;
-	}		
+	}
+
+	public function hasTags($tags) {
+		return array_intersect($this->tags->toArray(), $tags);
+	}
 }
 
 ?>

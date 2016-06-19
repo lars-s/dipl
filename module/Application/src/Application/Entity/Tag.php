@@ -49,16 +49,15 @@ class Tag {
 	public function __construct() {
 		$this->appliesTo = new ArrayCollection();
 	}
-	/**
-	 * @return the $name
-	 */
+	
+	public function __toString() {
+		return $this->name;
+	}
+	
 	public function getName() {
 		return $this->name;
 	}
 
-	/**
-	 * @param field_type $name
-	 */
 	public function setName($name) {
 		$this->name = $name;
 	}
@@ -77,9 +76,6 @@ class Tag {
 // 		$this->description = $description;
 // 	}
 
-	/**
-	 * @return the $appliesTo
-	 */
 	public function getAppliesTo() {
 		return $this->appliesTo;
 	}
@@ -102,7 +98,7 @@ class Tag {
 Class TagRepository extends EntityRepository 
 {
 	public function getNamesAndIds() {
-		$query ='SELECT partial c.{id, name} FROM Application\Entity\Tag c ORDER BY c.name ASC';
+		$query = 'SELECT partial c.{id, name} FROM Application\Entity\Tag c ORDER BY c.name ASC';
 	
 		return $this->_em->createQuery($query)->getResult();
 	}

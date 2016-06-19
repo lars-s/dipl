@@ -11,6 +11,9 @@ return array(
                     'user'     => 'dbu_dipl',
                     'password' => 'Unk2?2j3',
                     'dbname'   => 'db_cplus',
+                    'driverOptions' => array(
+                        \PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8'
+                    ),
                 )
             )
         )

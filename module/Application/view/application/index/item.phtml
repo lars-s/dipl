@@ -22,63 +22,71 @@
 	?>
 
     <div style="margin-bottom:20px;" class="ccbox mainwrapper">
-    	<h2>
-    	<?php 
+    	
+    	
+    	<h2><strong><?=$type=="task" ? "Aufgabenstellung" : "Wissen"?></strong></h2>
+ 		<?php 
     	echo $k->getTechnology()->getName();
     	if (null !== $k->getCompany()) {
 			echo " --- " . $k->getCompany()->getName();
 		}
-    	?>			
-    	</h2>
-    	
-    	<?php 
-    			echo '<div class="recommendations-wrapper">';
-				echo '<div class="recommendation">';
-				
-				echo '<p>' . $text . '</p>';
-				
-				echo '</div></div>';
+		echo '<div class="recommendations-wrapper">';
+		echo '<div class="recommendation">';
+		
+		echo '<p>' . $text . '</p>';
+		
+		echo '</div></div>';
 		?>
 		<br>
 		
-    	<h3>
     	<?php
     	if (null !== $k->getTags()) {
-			echo "<h3>Tags</h3>";
+			echo "<h3>Tags:</h3>";
+			
     		foreach ($k->getTags() as $t) {
 				echo $t->getName() . " ";
 			}
     	}
     	?>
-    	</h3>
-    	
     	<br>
-    	<br>
-    	
-    	<?php 
-    	if ($type == "task" && $k->getStatus()) {
-    		echo "<form method='post' id='solution-form'>";
-	    		echo "<h2><strong>Deine Lösung</strong></h2>";
-	    		echo "<textarea name='solution' rows='5' cols='51'></textarea>";
-	    		echo "<br>";
-	    		echo "<button type='submit' form='solution-form'>Aufgabe abschließen</button>";
-	    	echo "</form>";
-	    }
-	    ?>
     	<br>
     	<br>
     	<?php 
     		echo "<p class='small'>Erstellt am " . $k->getCreated()->format("d.m.Y H:i")
-    			. " von <strong>" . $k->getAuthor()->getFullname() .  "</strong></p>"; 
+    			. " von {$k->getAuthor()->getFullname()}</p>"; 
     	?>
     		
     	<?php 
     	if ($k->getUpdated() != $k->getCreated() )
     	{
-    		echo "<h3>Zuletzt geändert am " . $k->getUpdated()->format("d.m.Y H:i")
-    		. " von <strong>Lars Schröer</strong></h3>";
+    		echo "<p class='small'>Zuletzt geändert am " . $k->getUpdated()->format("d.m.Y H:i")
+    		. " von {$k->getAuthor()->getFullname()}</p>"; 
     	}	
     	?>
+    </div>
+    <?php 
+    	if ($type == "task" && !$k->getStatus()) {
+    		echo '<div class="ccbox mainwrapper" style="margin-left:10px;">';
+			echo "<h2><strong>Deine Lösung</strong></h2>";
+    		echo "<form method='post' id='solution-form'>";
+	    		echo "<textarea name='solution' rows='5' cols='51'></textarea>";
+	    		echo "<br>";
+	    		echo "<button type='submit' form='solution-form'>Aufgabe abschließen</button>";
+	    	echo "</form>";
+	    }
+   	 echo "</div>";
+    ?>
+    
+    <?php 
+    	if (isset($this->reccs)) {
+	   		echo '<div class="rec-div ccbox mainwrapper">';
+	    	echo "<h2><strong>Empfehlungen</strong></h2>";
+	    	foreach ($this->reccs as $r) {
+				echo "<h3>Wertigkeit: {$r["score"]}</h3>";
+				echo "<div class='recommendation'><p>{$r["description"]}</p></div>";
+			}
+		}
+	?>
     </div>
     
 </div>

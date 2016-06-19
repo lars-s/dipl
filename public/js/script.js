@@ -62,3 +62,38 @@ $(function() {
     	}
      });
 });
+
+$("button#getRec").on("click", function() {
+	getRecommendationForAssignee(
+			$("select.tech option:selected").text(),
+			$("select.comp option:selected").text(),
+			$(".taginputs").val()
+	);
+})
+
+function getRecommendationForAssignee(technology, company, tags) {
+	$.ajax({
+		url: "get-recommandation-assignee",
+		data: {technology: technology, company: company, tags: tags},
+		method: "POST",
+		success: function(data) {
+			$(".rec-list *").remove();
+						
+			$.each(data, function(key, value) {
+				$(".rec-list")
+					.append("<ul data-id='" + value["id"] + "'>" +
+						"<li>" + value["fullname"] + "</li>" +
+						"<li class='score'>" + value["score"] + "</li></ul>");
+			})
+			if (!$(".rec-list *").size()) {
+				$(".rec-list").append("<p>Keine Treffer!</p>");
+			}
+			
+		}
+	})
+}
+
+$(".rec-list").on("click", "ul", function() {
+	var id = $(this).data("id");
+	$("select[name='assignee'] option[value='" + id + "'").prop("selected", true);
+})

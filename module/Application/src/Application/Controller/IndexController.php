@@ -15,6 +15,7 @@ use Application\Entity\Knowledge;
 use Application\Entity\Tag;
 use DoctrineModule\Stdlib\Hydrator\DoctrineObject as DoctrineHydrator;
 use Application\Entity\Task;
+use Zend\View\Model\JsonModel;
 
 class IndexController extends AbstractActionController
 {
@@ -52,6 +53,8 @@ class IndexController extends AbstractActionController
     public function itemAction() 
     {
     	$em = $this->getServiceLocator()->get('doctrine.entitymanager.orm_default');
+    	$values = array();
+    	
     	
     	if ($this->getRequest()->isPost())
     	{
@@ -68,13 +71,38 @@ class IndexController extends AbstractActionController
     		} else {
     			$ferrors[] = "Leerer Lösungstext!";
     		}
+    		$values["formErrors"] = $ferrors;
     	}
     	
-    	$item = $em->getRepository('Application\Entity\Knowledge')->findOneBy(array('id' => $this->params()->fromRoute('id'))) ?
-    		$em->getRepository('Application\Entity\Knowledge')->findOneBy(array('id' => $this->params()->fromRoute('id'))):
-    		$em->getRepository('Application\Entity\Task')->findOneBy(array('id' => $this->params()->fromRoute('id'))) ;
-    	
-    	return new ViewModel(["item" => $item, "formErrors" => $ferrors]);
+    	if ( $em->getRepository('Application\Entity\Knowledge')->find($this->params()->fromRoute('id')) ) {
+    		$item = $em->getRepository('Application\Entity\Knowledge')->find($this->params()->fromRoute('id'));
+    		$values["item"] = $item;
+    	} else {
+    		// DIES IST EIN TASK!
+    		$item = $em->getRepository('Application\Entity\Task')->find($this->params()->fromRoute('id'));
+    		$values["item"] = $item;
+
+			$tags = array();
+    		foreach ($item->getTags() as $tagText)
+			{
+				$tagText = trim($tagText);
+				if ($tagText !== "") {
+					$tags[] = $tagText;
+				}
+			}
+
+    		$values["reccs"] = $em->getRepository('Application\Entity\Task')->getRecommendations(
+    			$item->getTechnology(),
+    			$item->getCompany(),
+    			$tags
+    		);    
+    		
+    		usort($values["reccs"], function($a, $b) {
+    			return $b["score"] - $a["score"];
+    		});
+    	}
+
+    	return new ViewModel($values);
     }
     
     public function addItemAction() 
@@ -147,7 +175,7 @@ class IndexController extends AbstractActionController
 				"technology" => $em->find('\Application\Entity\Technology', $info->technology),
 				"company" => $em->find('\Application\Entity\Company', $info->company),
 				"author" => $em->find('\Application\Entity\User', $_SESSION["userId"]),
-				"status" => 1
+				"status" => 0
 			);
 			
 			$item = $hydrator->hydrate($data, $item);
@@ -184,6 +212,7 @@ class IndexController extends AbstractActionController
     	$allCompanies = $em->getRepository('\Application\Entity\Company')->findBy([], ['name' => 'ASC']);
     	$allTechnologies = $em->getRepository('\Application\Entity\Technology')->findBy([], ['name' => 'ASC']);
     	$allTags = $em->getRepository('\Application\Entity\Tag')->getNamesAndIds();
+
     	    	
     	return new ViewModel(array("assignees" => $allEmployees, "companies" => $allCompanies, 
     			"technologies" => $allTechnologies, "tags" => $allTags ));
@@ -249,5 +278,40 @@ class IndexController extends AbstractActionController
     {
     	session_destroy();
     	return $this->redirect()->toRoute('login');
+    }
+    
+    public function getRecommendationAssigneeAction() {    	
+    	if ($this->getRequest()->isPost())
+    	{    		
+    		$em = $this->getServiceLocator()->get('doctrine.entitymanager.orm_default');
+    		$query = $this->getRequest()->getPost();
+    		    		
+    		$company = $em->getRepository('\Application\Entity\Company')->findOneBy(array("name" => $query["company"]));
+    		$technology = $em->getRepository('\Application\Entity\Technology')->findOneBy(array("name" => $query["technology"]));
+    		$t = explode(",", strtolower($query["tags"]));
+			$tags = array();
+    		foreach ($t as $tagText)
+			{
+				$tagText = trim($tagText);
+				if ($tagText !== "") {
+					$tags[] = $tagText;
+				}
+			}
+    		
+    		$return = $em->getRepository('\Application\Entity\User')->getRecommendationForAssignment(
+    			$technology,
+    			$company,
+    			$tags
+    		);
+    		
+    		usort($return, function($a, $b) {
+				return $b["score"] - $a["score"];
+    		});
+    		
+    		return new JsonModel($return);
+
+    	} else {
+    		return $this->redirect()->toRoute('home');
+    	}
     }
 }

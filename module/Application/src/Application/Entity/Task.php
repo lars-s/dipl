@@ -27,12 +27,6 @@ class Task extends KnowledgeSuperclass {
 	protected $solution;
 	
 	/**
-	 * 0 = erledigt, 1 = offen
-	 * @ORM\Column(nullable=false)
-	 */
-	protected $status;
-	
-	/**
 	 * @ORM\ManyToOne(targetEntity="User")
 	 * @ORM\JoinColumn(name="assignee", referencedColumnName="id")
 	 */
@@ -45,13 +39,7 @@ class Task extends KnowledgeSuperclass {
 	public function setDescription($description) {
 		$this->description = $description;
 	}
-	public function getStatus() {
-		return $this->status;
-	}
 
-	public function setStatus($status) {
-		$this->status = $status;
-	}
 	public function getAssignee() {
 		return $this->assignee;
 	}
@@ -77,6 +65,40 @@ Class TaskRepository extends EntityRepository {
 		$count = $q->getSingleScalarResult();
 
 		return $count;
+	}
+	
+	public function getRecommendations($tech, $comp, $tags) {
+		$q = $this->_em->createQuery('SELECT k FROM \Application\Entity\Knowledge k WHERE k.status = 1');
+		$items = $q->getResult();
+		
+		$q = $this->_em->createQuery('SELECT t FROM \Application\Entity\Task t WHERE t.status = 1');
+		$items += $q->getResult();
+		
+		$return = array();
+		foreach ($items as $k) {
+				
+			$foo["score"] = 0;
+			$foo["id"] = $k->getId();
+				
+			if ($k->getTechnology() == $tech && $k->getCompany() == $comp && $k->hasTags($tags)) {
+				$foo["score"] += 5;
+					
+			} else if (	$k->getTechnology() == $tech && $k->getCompany() == $comp
+					|| $k->getTechnology() == $tech && $k->hasTags($tags)
+					|| $k->getCompany() == $comp && $k->hasTags($tags)) {
+				$foo["score"] += 3;
+					
+			} else if ($k->getTechnology() == $tech || $k->getCompany() == $comp || $k->hasTags($tags)) {
+				$foo["score"] += 1;
+			}
+
+			if ($foo["score"] > 0) {
+				$foo["description"] = $k->getContent();
+				$return[] = $foo;
+			}
+		}
+		
+		return $return;
 	}
 }
 ?>

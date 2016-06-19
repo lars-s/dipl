@@ -3,13 +3,14 @@
 namespace Application\Entity;
 
 use Zend\Form\Annotation;
+use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * Technology
  * 
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="TechnologyRepository")
  * @ORM\Table(name="technology")
  */
 class Technology {
@@ -72,5 +73,13 @@ class Technology {
 	public function setAppliesTo($appliesTo) {
 		$this->appliesTo = $appliesTo;
 	}
+}
 
+Class TechnologyRepository extends EntityRepository
+{
+	public function findAppliesTo($keyword) {
+		if ($keyword !== "task" || $keyword !== "knowledge") {
+			return false;
+		}
+	}
 }
