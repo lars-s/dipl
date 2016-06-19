@@ -181,6 +181,8 @@ div.linkbox {
 
 div.linkbox > p {
 	padding: 10px 15px;
+	max-height:171px;
+	overflow: hidden;
 }
 
 strong {
