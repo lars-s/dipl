@@ -19,13 +19,17 @@ class Knowledge extends KnowledgeSuperclass {
 	/**
 	 * Beschreibung des Wissens
 	 *
-	 * @ORM\Column(nullable=false)
+	 * @ORM\Column(nullable=false, length=50000)
 	 */
 	protected $content;
 
 	public function getContent() {
 		return $this->content;
 	}
+	public function getdDescription() {
+		return $this->content;
+	}
+	
 
 	public function setContent($content) {
 		$this->content = $content;

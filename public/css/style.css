@@ -163,7 +163,7 @@ div.recommendation {
 	background-color: #463E3E;
 	color: whitesmoke;
 	cursor: pointer;
-	max-width: 250px;
+	max-width: 450px;
 }
 
 div.linkbox {
@@ -263,5 +263,20 @@ ul.rec-list ul {
 
 ul.rec-list ul:hover {
 	cursor: pointer;
+	color: #F60;
+}
+
+button.tag {    
+	float: left;
+    padding: 3px 5px;
+    margin: 2px;
+    background: #3e3b3b;
+	cursor: pointer;
+    border: none;
+	outline: none;
+    color: #ece3e3;	
+}
+
+button.tag:hover {
 	color: #F60;
 }

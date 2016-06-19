@@ -17,12 +17,12 @@ use Doctrine\ORM\EntityRepository;
  */
 class Task extends KnowledgeSuperclass {
 	/**
-	 * @ORM\Column(nullable=false)
+	 * @ORM\Column(nullable=false, length=50000)
 	 */
 	protected $description;		
 	
 	/**
-	 * @ORM\Column(nullable=true)
+	 * @ORM\Column(nullable=true, length=2000)
 	 */
 	protected $solution;
 	
@@ -32,6 +32,10 @@ class Task extends KnowledgeSuperclass {
 	 */
 	protected $assignee;
 
+	public function getContent() {
+		return $this->description;
+	}
+	
 	public function getDescription() {
 		return $this->description;
 	}

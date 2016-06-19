@@ -28,6 +28,24 @@ class Module
         $eventManager        = $e->getApplication()->getEventManager();
         $moduleRouteListener = new ModuleRouteListener();
         $moduleRouteListener->attach($eventManager);
+
+        $application  = $e->getTarget();
+        $sm = $application->getServiceManager();
+        $em = $sm->get('doctrine.entitymanager.orm_default');
+        
+        if ( 0 ) {
+	        $classes = array(
+	        	$em->getClassMetadata('Application\Entity\Company'),
+	        	$em->getClassMetadata('Application\Entity\Knowledge'),
+        		$em->getClassMetadata('Application\Entity\Task'),
+        		$em->getClassMetadata('Application\Entity\Tag'),
+        		$em->getClassMetadata('Application\Entity\Technology'),
+        		$em->getClassMetadata('Application\Entity\User'),
+	        	$em->getClassMetadata('Application\Entity\KnowledgeSuperclass')
+	        );
+	        $tool = new \Doctrine\ORM\Tools\SchemaTool($em);
+	        $tool->updateSchema($classes);
+        }
     }
 
     public function getConfig()

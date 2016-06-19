@@ -33,7 +33,7 @@
 		echo '<div class="recommendations-wrapper">';
 		echo '<div class="recommendation">';
 		
-		echo '<p>' . $text . '</p>';
+		echo "<p><pre>{$text}</pre></p>";
 		
 		echo '</div></div>';
 		?>
@@ -44,7 +44,10 @@
 			echo "<h3>Tags:</h3>";
 			
     		foreach ($k->getTags() as $t) {
-				echo $t->getName() . " ";
+				echo "<form method='POST' id='{$t->getId()}' name='{$t->getId()}' action='../results' >";
+				echo "<input name='query' value='{$t->getName()}' hidden>";
+				echo "<button type='submit' class='tag'>{$t->getName()}</button> ";
+				echo "</form>";
 			}
     	}
     	?>

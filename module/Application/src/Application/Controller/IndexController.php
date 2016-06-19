@@ -235,7 +235,7 @@ class IndexController extends AbstractActionController
     		} 
     		
     		// IS TAG?
-    		$results = $em->getRepository('\Application\Entity\Tag')->findBy(["name" => $query]);
+    		$results = $em->getRepository('\Application\Entity\Tag')->findOneBy(["name" => $query]);
     	    if ($results) {
     			$return["tag"] = $results;
     			$return["tagItems"] = $results->getAppliesTo();
