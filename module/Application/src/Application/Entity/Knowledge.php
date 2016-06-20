@@ -26,7 +26,7 @@ class Knowledge extends KnowledgeSuperclass {
 	public function getContent() {
 		return $this->content;
 	}
-	public function getdDescription() {
+	public function getDescription() {
 		return $this->content;
 	}
 	

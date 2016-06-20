@@ -1,13 +1,13 @@
 <?php 
 	$k = $this->item;
 	
-	if (method_exists($k, "getContent")) {
-		$type = "knowledge";
-		$text = $k->getContent();
-	} else {
+	if (method_exists($k, "setSolution")) {
 		$type = "task";
-		$text = $k->getDescription();
+	} else {
+		$type = "knowledge";
 	}
+	
+	$text = $k->getDescription();
 	
 	$ferrors = $this->formErrors;
 	
@@ -33,7 +33,7 @@
 		echo '<div class="recommendations-wrapper">';
 		echo '<div class="recommendation">';
 		
-		echo "<p><pre>{$text}</pre></p>";
+		echo "<pre>{$text}</pre>";
 		
 		echo '</div></div>';
 		?>
@@ -44,10 +44,12 @@
 			echo "<h3>Tags:</h3>";
 			
     		foreach ($k->getTags() as $t) {
-				echo "<form method='POST' id='{$t->getId()}' name='{$t->getId()}' action='../results' >";
-				echo "<input name='query' value='{$t->getName()}' hidden>";
-				echo "<button type='submit' class='tag'>{$t->getName()}</button> ";
-				echo "</form>";
+				if ($t->getName() !== "") {
+					echo "<form method='POST' id='{$t->getId()}' name='{$t->getId()}' action='../results' >";
+					echo "<input name='query' value='{$t->getName()}' hidden>";
+					echo "<button type='submit' class='tag'>{$t->getName()}</button> ";
+					echo "</form>";
+				}
 			}
     	}
     	?>
@@ -86,8 +88,14 @@
 	    	echo "<h2><strong>Empfehlungen</strong></h2>";
 	    	foreach ($this->reccs as $r) {
 				echo "<h3>Wertigkeit: {$r["score"]}</h3>";
-				echo "<div class='recommendation'><p>{$r["description"]}</p></div>";
+				echo "<div data-id='{$r["id"]}' class='recommendation'><p>{$r["description"]}</p></div>";
 			}
+		}
+		
+    	if (isset($this->solution)) {
+	   		echo '<div class="rec-div ccbox mainwrapper">';
+	    	echo "<h2><strong>Lösung</strong></h2>";
+			echo "<div class='solution'><pre>{$this->solution}</pre></div>";
 		}
 	?>
     </div>

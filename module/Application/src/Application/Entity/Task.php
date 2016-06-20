@@ -76,7 +76,7 @@ Class TaskRepository extends EntityRepository {
 		$items = $q->getResult();
 		
 		$q = $this->_em->createQuery('SELECT t FROM \Application\Entity\Task t WHERE t.status = 1');
-		$items += $q->getResult();
+		$items = array_merge($q->getResult(), $items);
 		
 		$return = array();
 		foreach ($items as $k) {
@@ -85,20 +85,35 @@ Class TaskRepository extends EntityRepository {
 			$foo["id"] = $k->getId();
 				
 			if ($k->getTechnology() == $tech && $k->getCompany() == $comp && $k->hasTags($tags)) {
-				$foo["score"] += 5;
+				$foo["score"] += count($k->hasTags($tags)) + 5;
 					
 			} else if (	$k->getTechnology() == $tech && $k->getCompany() == $comp
 					|| $k->getTechnology() == $tech && $k->hasTags($tags)
 					|| $k->getCompany() == $comp && $k->hasTags($tags)) {
-				$foo["score"] += 3;
+				$foo["score"] += count($k->hasTags($tags)) + 3;
 					
 			} else if ($k->getTechnology() == $tech || $k->getCompany() == $comp || $k->hasTags($tags)) {
-				$foo["score"] += 1;
+				$foo["score"] += count($k->hasTags($tags)) + 1;
 			}
 
 			if ($foo["score"] > 0) {
-				$foo["description"] = $k->getContent();
-				$return[] = $foo;
+				if (method_exists($k, "getSolution")) {
+					$foo["description"] = $k->getSolution();
+				} else {
+					$foo["description"] = $k->getContent();
+				}
+				
+				$duplicate = false;
+				foreach ($return as $key => $e) {
+					similar_text($e["description"], $foo["description"], $v);
+					if ($v > 90) {
+						$return[$key]["score"] = (intval($foo["score"]) + intval($e["score"]));
+						$duplicate = true;
+					}
+				}
+				if (!$duplicate) {
+					$return[] = $foo;
+				}
 			}
 		}
 		

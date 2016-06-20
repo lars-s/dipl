@@ -12,6 +12,12 @@ $(".main.container").on("click", ".recommendations-wrapper, .linkbox", function(
 	}
 })
 
+$(".rec-div.ccbox div.recommendation").on("click", function() {
+	if ($(this).data("id") !== "") {
+		window.location.href = $(this).data("id");
+	}
+})
+
 $("input.search").on("keypress", function() {
 	if (event.keyCode == 38) {
 		event.preventDefault();
@@ -58,18 +64,19 @@ $(function() {
     		// add placeholder to get the comma-and-space at the end
     		terms.push( "" );
     		this.value = terms.join( ", " );
+    		foo();
     		return false;
     	}
      });
 });
 
-$("button#getRec").on("click", function() {
+function foo() {
 	getRecommendationForAssignee(
 			$("select.tech option:selected").text(),
 			$("select.comp option:selected").text(),
 			$(".taginputs").val()
 	);
-})
+}
 
 function getRecommendationForAssignee(technology, company, tags) {
 	$.ajax({
@@ -77,16 +84,20 @@ function getRecommendationForAssignee(technology, company, tags) {
 		data: {technology: technology, company: company, tags: tags},
 		method: "POST",
 		success: function(data) {
-			$(".rec-list *").remove();
-						
+			$(".rec-list *").remove();				
+			
 			$.each(data, function(key, value) {
+				var plural = value["score"] > 1 ? "e" : "";
 				$(".rec-list")
-					.append("<ul data-id='" + value["id"] + "'>" +
+					.append("<ul class='rec' data-id='" + value["id"] + "'>" +
 						"<li>" + value["fullname"] + "</li>" +
-						"<li class='score'>" + value["score"] + "</li></ul>");
-			})
+						"<li class='score'>" + value["score"] + " Punkt" + plural + "</li></ul>");
+			})			
+
 			if (!$(".rec-list *").size()) {
 				$(".rec-list").append("<p>Keine Treffer!</p>");
+			} else {
+				$(".rec-list").prepend("<ul class='headline'><li>Name</li><li>Empfehlungswert</li></ul>");
 			}
 			
 		}
@@ -96,4 +107,9 @@ function getRecommendationForAssignee(technology, company, tags) {
 $(".rec-list").on("click", "ul", function() {
 	var id = $(this).data("id");
 	$("select[name='assignee'] option[value='" + id + "'").prop("selected", true);
+})
+
+
+$("select.comp, select.tech, input.taginputs").on("change", function() {
+	foo();
 })

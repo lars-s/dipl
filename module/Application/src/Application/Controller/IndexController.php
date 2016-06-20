@@ -65,7 +65,7 @@ class IndexController extends AbstractActionController
     		if ($solution !== "") 
     		{
     			$task->setSolution($solution);
-    			$task->setStatus(0);
+    			$task->setStatus(1);
     			$em->flush();
     			return $this->redirect()->toRoute('my-open-tasks');
     		} else {
@@ -90,16 +90,20 @@ class IndexController extends AbstractActionController
 					$tags[] = $tagText;
 				}
 			}
-
-    		$values["reccs"] = $em->getRepository('Application\Entity\Task')->getRecommendations(
-    			$item->getTechnology(),
-    			$item->getCompany(),
-    			$tags
-    		);    
-    		
-    		usort($values["reccs"], function($a, $b) {
-    			return $b["score"] - $a["score"];
-    		});
+			
+			if ($item->getStatus()) {
+				$values["solution"] = $item->getSolution();
+				
+			} else {
+				$values["reccs"] = $em->getRepository('Application\Entity\Task')->getRecommendations(
+						$item->getTechnology(),
+						$item->getCompany(),
+						$tags
+				);
+	    		usort($values["reccs"], function($a, $b) {
+	    			return $b["score"] - $a["score"];
+	    		});
+			}
     	}
 
     	return new ViewModel($values);

@@ -164,6 +164,7 @@ div.recommendation {
 	color: whitesmoke;
 	cursor: pointer;
 	max-width: 450px;
+	padding: 7px;
 }
 
 div.linkbox {
@@ -259,11 +260,20 @@ div.rec-div ul li {
 	margin-right: 15px;
 }
 
-ul.rec-list ul {
+ul.rec-list ul.rec {
 	cursor: pointer;
 }
 
-ul.rec-list ul:hover {
+ul.rec-list ul li:nth-child(1) {
+	width:200px;
+	float:left;
+}
+
+ul.rec-list ul.headline {
+	margin-bottom: 10px;
+}
+
+ul.rec-list ul.rec:hover {
 	cursor: pointer;
 	color: #F60;
 }
@@ -281,4 +291,21 @@ button.tag {
 
 button.tag:hover {
 	color: #F60;
+}
+
+.rec-div .recommendation {
+	margin-top: 0px;
+	margin-bottom: 15px;
+}
+
+.rec-div .solution {
+	margin-top: 0px;
+	margin-bottom: 15px;    
+	margin-top: 10px;
+    margin-right: 10px;
+    background-color: #463E3E;
+    color: whitesmoke;
+    cursor: pointer;
+    max-width: 450px;
+	padding: 7px;
 }
