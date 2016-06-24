@@ -44,6 +44,10 @@ class Company {
 		$this->appliesTo = new ArrayCollection();
 	}
 
+	public function __toString() {
+		return $this->name;
+	}
+	
 	public function getName() {
 		return $this->name;
 	}

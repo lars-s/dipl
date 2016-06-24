@@ -38,6 +38,11 @@ echo $this->doctype();
                 <div class="collapse navbar-collapse">
                 
                 <?php 
+                if (isset($_SESSION["openTasks"])) 
+                {
+                	echo "<p style='float:left' class='pagetitle opentasks logout'><a href='" . $this->url('my-open-tasks') . "'><-- Offene Aufgaben</a></p>";
+                }	   
+                
                 if (isset($_SESSION["user"])) 
                 {
                 	echo "<p style='float:right' class='pagetitle logout'>Hallo, " . $_SESSION["user"] . "! " .

@@ -18,6 +18,16 @@
 
 <div class="wrapp">
 
+	<?php 
+	if ($this->addedElement) {
+		echo "<div class='overlay'>";
+			echo "<div class='ccbox mainwrapper'>";
+			echo "<h2><strong>Aufgabe erfolgreich erstellt</strong></h2>";
+			echo "</div>";
+		echo "</div>";
+	}
+	?>
+
     <div style="margin-bottom:20px;" class="ccbox mainwrapper">
     	<h2><strong>Aufgabe erstellen</strong></h2>
     	<br>

@@ -8,14 +8,25 @@
 if ($openTasks) {
     echo "<div class='ccbox mainwrapper'>";
     	echo "<h2>Meine Aufgaben</h2>";
+    	echo "<ul class='header opentasks'>"; 
+	    	echo "<li>Datum</li>";
+	    	echo "<li>Projektmanager</li>";
+	    	echo "<li>Firma</li>";
+	    	echo "<li class='description'>Beschreibung</li>";
+	    	echo "<li>Status</li>";
+    	echo "</ul>";
       	
       	foreach($openTasks as $k) {
-			echo "<div data-link='" . $this->url('item', array('id' => $k->getId())) . "' class='recommendations-wrapper left'>";
-			echo "<div class='recommendation'>";
-			
-			echo "<p>" . $k->getDescription() . "</p>";
-			
-			echo "</div></div>";
+      		
+      		echo "<ul data-link='" . $this->url('item', array('id' => $k->getId())) . "' class='linkbox contentelement opentasks'>";
+	      		echo "<li>{$k->getCreated()->format("d.m.y")}</li>";
+	      		echo "<li>{$k->getAuthor()->getFullname()}</li>";
+	      		echo "<li>";
+	      		echo $k->getCompany() ? $k->getCompany() : "--"; 
+	      		echo "</li>";
+	      		echo "<li class='description'>{$k->getDescription()}</li>";
+	      		echo "<li>{$k->getStatusText()}</li>";
+      		echo "</ul>";
 		}
       	      	
     echo "</div>";

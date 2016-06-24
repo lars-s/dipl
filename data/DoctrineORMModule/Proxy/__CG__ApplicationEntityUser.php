@@ -64,10 +64,10 @@ class User extends \Application\Entity\User implements \Doctrine\ORM\Proxy\Proxy
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return array('__isInitialized__', 'id', 'firstname', 'lastname', 'assignedTasks', 'created', 'updated', 'contributions');
+            return array('__isInitialized__', 'id', 'firstname', 'lastname', 'assignedTasks', 'level', 'created', 'updated', 'contributions');
         }
 
-        return array('__isInitialized__', 'id', 'firstname', 'lastname', 'assignedTasks', 'created', 'updated', 'contributions');
+        return array('__isInitialized__', 'id', 'firstname', 'lastname', 'assignedTasks', 'level', 'created', 'updated', 'contributions');
     }
 
     /**
@@ -307,6 +307,28 @@ class User extends \Application\Entity\User implements \Doctrine\ORM\Proxy\Proxy
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'getFullname', array());
 
         return parent::getFullname();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getLevel()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getLevel', array());
+
+        return parent::getLevel();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setLevel($level)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setLevel', array($level));
+
+        return parent::setLevel($level);
     }
 
 }

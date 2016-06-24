@@ -10,16 +10,23 @@
 	$text = $k->getDescription();
 	
 	$ferrors = $this->formErrors;
-	
 ?>
-
-<div class="wrapp">
+<div class="wrapp opentask">
 	<?php 
 	if ($ferrors) 
 	{
-		echo "<div>" . print_r($ferrors) . "</div>";
-	}
+		foreach ($ferrors as $error) {
+			echo "<p class='error'>{$error}</p>";
+		}
+	}             
+	   
+	if (isset($_SESSION["searchQuery"]) && isset($this->ref)) 
+    { 
+        echo "<form class='backresults' method='POST' action='../results'>";
+    	echo "<input name='query' value='{$_SESSION['searchQuery']}' hidden=''><button type='submit' class='tag'><-- Zu den Suchergebnissen</button> </form>";
+    }
 	?>
+
 
     <div style="margin-bottom:20px;" class="ccbox mainwrapper">
     	
@@ -71,7 +78,7 @@
     </div>
     <?php 
     	if ($type == "task" && !$k->getStatus()) {
-    		echo '<div class="ccbox mainwrapper" style="margin-left:10px;">';
+    		echo '<div class="ccbox mainwrapper">';
 			echo "<h2><strong>Deine Lösung</strong></h2>";
     		echo "<form method='post' id='solution-form'>";
 	    		echo "<textarea name='solution' rows='5' cols='51'></textarea>";
@@ -81,15 +88,20 @@
 	    }
    	 echo "</div>";
     ?>
-    
+</div>    
     <?php 
     	if (isset($this->reccs)) {
 	   		echo '<div class="rec-div ccbox mainwrapper">';
 	    	echo "<h2><strong>Empfehlungen</strong></h2>";
 	    	foreach ($this->reccs as $r) {
-				echo "<h3>Wertigkeit: {$r["score"]}</h3>";
+				echo "<h3  style='float:left;'>Wertigkeit: {$r["score"]}</h3><h3 style='float:right;' class='usesolution'>Diese Lösung verwenden</h3>";
 				echo "<div data-id='{$r["id"]}' class='recommendation'><p>{$r["description"]}</p></div>";
-			}
+			}		
+			echo "<div class='overlay unbreakable' style='display:none;'>";
+				echo "<div class='ccbox mainwrapper'>";
+				echo "<h2><strong>Wird bearbeitet..</strong></h2>";
+			echo "</div>";
+		echo "</div>";
 		}
 		
     	if (isset($this->solution)) {
@@ -98,6 +110,3 @@
 			echo "<div class='solution'><pre>{$this->solution}</pre></div>";
 		}
 	?>
-    </div>
-    
-</div>

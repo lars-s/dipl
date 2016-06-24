@@ -17,6 +17,9 @@ class Module
     public function onBootstrap(MvcEvent $e)
     {    	
     	session_start();
+    	unset($_SESSION["openTasks"]);
+    	 
+    	
     	$e->getApplication()->getEventManager()->getSharedManager()->attach('Zend\Mvc\Controller\AbstractActionController', 'dispatch', function($e) {
     		$controller = $e->getTarget();
     		$target = $e->getApplication()->getServiceManager()->get('Application')->getMvcEvent()->getRouteMatch()->getMatchedRouteName();

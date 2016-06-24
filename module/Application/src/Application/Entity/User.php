@@ -49,6 +49,13 @@ class User {
 	protected $assignedTasks;
 	
 	/**
+	 * 0 = Entwickler
+	 * 1 = Projektmanager
+	 * @ORM\Column(name="level", type="smallint")
+	 */
+	protected $level;
+	
+	/**
 	 * @var datetime
 	 *
 	 * @ORM\Column(name="created", type="datetime", nullable=false)
@@ -123,6 +130,14 @@ class User {
 	public function getFullname() {
 		return $this->firstname . " " . $this->lastname;
 	}
+	public function getLevel() {
+		return $this->level;
+	}
+
+	public function setLevel($level) {
+		$this->level = $level;
+	}
+
 }
 
 Class UserRepository extends EntityRepository 
@@ -142,7 +157,7 @@ Class UserRepository extends EntityRepository
 	}
 
 	public function getRecommendationForAssignment($tech, $comp, $tags) {
-		$q = $this->_em->createQuery('SELECT u FROM \Application\Entity\User u');
+		$q = $this->_em->createQuery('SELECT u FROM \Application\Entity\User u WHERE u.level = 0');
 		$users = $q->getResult();
 				
 		$return = array();

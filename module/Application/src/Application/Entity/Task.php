@@ -59,6 +59,13 @@ class Task extends KnowledgeSuperclass {
 		$this->solution = $solution;
 	}
 
+	public function getStatusText() {
+		if ($this->status == 0) {
+			return "offen";
+		} else if ($this->status == 2) {
+			return "erwartet Bestägigung";
+		}
+	}
 
 }
 

@@ -249,6 +249,7 @@ input+input[type="submit"] {
 div.rec-div{
 	float:left;
 	margin-left:10px;
+    max-width: 500px;	
 }
 
 div.rec-div ul {
@@ -295,7 +296,9 @@ button.tag:hover {
 
 .rec-div .recommendation {
 	margin-top: 0px;
-	margin-bottom: 15px;
+	margin-bottom: 15px;   
+	float: left;
+    width: 100%;
 }
 
 .rec-div .solution {
@@ -308,4 +311,101 @@ button.tag:hover {
     cursor: pointer;
     max-width: 450px;
 	padding: 7px;
+}
+
+div.overlay {
+	position: absolute;
+    top: 0;
+    right: 0;
+    height: 100%;
+    width: 100%;
+    z-index: 500;
+    background-color: rgba(255,255,255,0.8);
+}
+
+div.overlay>.ccbox.mainwrapper {
+	position: fixed;
+    top: 30%;
+    left: 40%;
+}
+
+ul.opentasks {
+	list-style-type: none;
+	background: #3e3b3b;
+    padding: 4px 0px;	
+	float:left;
+	margin-bottom: 5px;
+	cursor: pointer;
+}
+
+ul.opentasks.header {
+	background: none;
+}
+
+ul.opentasks li {
+	display: inline;    
+	width: 150px;
+    float: left;
+}
+
+ul.opentasks li.description {
+	width: 350px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    padding-right: 20px;
+}
+
+p.error {
+	font-size: 23px;
+    color: red;
+}
+
+p.pagetitle.opentasks {
+	float:left; 
+	padding: 0px 17px;
+    font-weight: normal;	
+}
+
+p.pagetitle.opentasks a:hover {
+	color: #f60;
+}
+p.pagetitle.opentasks a {
+	color: #ece3e3;
+}
+
+form.backresults {
+	position: absolute;
+    top: -40px;
+    z-index: 5000;
+    left: 267px;
+    background: transparent;
+}
+
+form.backresults button {
+	background: transparent;
+}
+
+h3.usesolution {
+	cursor: pointer;
+}
+
+h3.usesolution:hover {
+	color: #f60;
+}
+
+div.wrapp.opentask {
+	width: 500px;
+	float:left;
+}
+
+div.wrapp.opentask > div {
+	width: 100%;
+	margin-left: 0;
+}
+
+div.wrapp.opentask > div textarea {
+	width: 100%;
+	height: 150px;
+	margin-bottom: 25px;
 }

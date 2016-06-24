@@ -113,3 +113,14 @@ $(".rec-list").on("click", "ul", function() {
 $("select.comp, select.tech, input.taginputs").on("change", function() {
 	foo();
 })
+
+$("div.overlay").on("click", function() {
+	if (!$(this).hasClass("unbreakable")) {
+		$(this).remove();	
+	}
+})
+
+$(".usesolution").on("click", function() {
+	$(".overlay").show();
+	console.log($(this).next(".recommendation").data("id"));
+})

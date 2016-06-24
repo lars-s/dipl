@@ -16,13 +16,14 @@
 		<p>Beiträge im System: <strong><?php echo $currentPostsNumber ?></strong></p>
 	</div>
 	
-	<div class="linkbox" data-link="<?php echo $this->url("add-task")?>">
-		<h3>Aufgabe stellen</h3>
+	<?php
+	if ($this->projectManager) {
+		echo "<div class='linkbox' data-link='{$this->url("add-task")}'>";
+		echo "<h3>Aufgabe stellen</h3>";
 		
-		<p>Gibt es was zu tun? <br> <strong>Erstelle eine Aufgabe!</strong></p>
-		<br>
-		<br>
-	</div>
+		echo "<p>Gibt es was zu tun? <br> <strong>Erstelle eine Aufgabe!</strong></p><br><br></div>";
+		}
+	?>
 	
 	<?php 
 	if ($myOpenTasks > 0) {

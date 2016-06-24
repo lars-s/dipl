@@ -46,8 +46,10 @@ class IndexController extends AbstractActionController
     	
     	$myOpenTasks = $em->getRepository('\Application\Entity\User')->getOpenTasksCount($user->getId());
     	
+    	$isProjectManager = $user->getLevel();
+    	
         return new ViewModel(["currentPosts" => $count, "preview" => $recentPosts,
-			"openTasks" => $openTasks, "myOpenTasks" => $myOpenTasks ]);
+			"openTasks" => $openTasks, "myOpenTasks" => $myOpenTasks, "projectManager" => $isProjectManager ]);
     }
     
     public function itemAction() 
@@ -55,6 +57,9 @@ class IndexController extends AbstractActionController
     	$em = $this->getServiceLocator()->get('doctrine.entitymanager.orm_default');
     	$values = array();
     	
+    	if (strpos($this->getRequest()->getHeader('referer'), "/results")) {
+    		$values["ref"] = "true";
+    	}
     	
     	if ($this->getRequest()->isPost())
     	{
@@ -90,6 +95,7 @@ class IndexController extends AbstractActionController
 					$tags[] = $tagText;
 				}
 			}
+    		$_SESSION["openTasks"] = true;
 			
 			if ($item->getStatus()) {
 				$values["solution"] = $item->getSolution();
@@ -114,6 +120,7 @@ class IndexController extends AbstractActionController
     	$em = $this->getServiceLocator()->get('doctrine.entitymanager.orm_default');
 		$user = $em->find('\Application\Entity\User', $_SESSION["userId"]);
     	
+		$ai = null;
     	if ($this->getRequest()->isPost()) 
     	{
     		$hydrator = new DoctrineHydrator($em);
@@ -129,6 +136,7 @@ class IndexController extends AbstractActionController
 			$item->setAuthor($user);
 			
 			$em->persist($item);
+			$ai = $item;
 
 			$tags = explode(",", strtolower($info->tags));
 			foreach ($tags as $tagText)
@@ -159,13 +167,13 @@ class IndexController extends AbstractActionController
     	$allTags = $em->getRepository('\Application\Entity\Tag')->getNamesAndIds();
     	
     	return new ViewModel(array("assignees" => $allEmployees, "companies" => $allCompanies,
-    			"technologies" => $allTechnologies, "tags" => $allTags ));
+    			"technologies" => $allTechnologies, "tags" => $allTags, "addedItem" => $ai ));
     }    
     
     public function addTaskAction() 
     {
     	$em = $this->getServiceLocator()->get('doctrine.entitymanager.orm_default');
-    	
+    	$ae = null;
     	if ($this->getRequest()->isPost()) 
     	{
 			$info = $this->getRequest()->getPost();
@@ -210,16 +218,17 @@ class IndexController extends AbstractActionController
 			
 			$em->persist($item);
 			$em->flush();
+			$ae = $tag;
     	}
     	
-    	$allEmployees = $em->getRepository('\Application\Entity\User')->findBy([], ['lastname' => 'ASC']);
+    	$allEmployees = $em->getRepository('\Application\Entity\User')->findBy(["level" => "0"], ['lastname' => 'ASC']);
     	$allCompanies = $em->getRepository('\Application\Entity\Company')->findBy([], ['name' => 'ASC']);
     	$allTechnologies = $em->getRepository('\Application\Entity\Technology')->findBy([], ['name' => 'ASC']);
     	$allTags = $em->getRepository('\Application\Entity\Tag')->getNamesAndIds();
 
     	    	
     	return new ViewModel(array("assignees" => $allEmployees, "companies" => $allCompanies, 
-    			"technologies" => $allTechnologies, "tags" => $allTags ));
+    			"technologies" => $allTechnologies, "tags" => $allTags, "addedElement" => $ae ));
     }
     
     public function resultsAction() 
@@ -228,9 +237,11 @@ class IndexController extends AbstractActionController
     	{
     		$em = $this->getServiceLocator()->get('doctrine.entitymanager.orm_default');
     		$query = $this->getRequest()->getPost()->query;
+    		
+    		$_SESSION["searchQuery"] = $query;
+    		
     		$return = array("query" => $query);
 
-    		
     		// IS TECHNOLOGY?
     		$result = $em->getRepository('\Application\Entity\Technology')->findOneBy(["name" => $query]);
     		if ($result) {
