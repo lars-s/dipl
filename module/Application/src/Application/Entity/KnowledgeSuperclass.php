@@ -45,6 +45,7 @@ class KnowledgeSuperclass {
 	/**
 	 * 0 = offene Aufgabe, sonstwie ungültiges Wissen
 	 * 1 = erledigte Aufgabe, gültiges Wissen
+	 * 2 = Task zur review durch Projektmanager
 	 * @ORM\Column(nullable=false)
 	 */
 	protected $status = 1;

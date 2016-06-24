@@ -33,16 +33,19 @@
     	
     	<h2><strong><?=$type=="task" ? "Aufgabenstellung" : "Wissen"?></strong></h2>
  		<?php 
-    	echo $k->getTechnology()->getName();
-    	if (null !== $k->getCompany()) {
-			echo " --- " . $k->getCompany()->getName();
+    	if (null !== $k->getTechnology()) {
+			echo "<pre>Technologie: 	{$k->getTechnology()->getName()}</pre>";
 		}
+    	if (null !== $k->getCompany()) {
+			echo "<pre>Firma: 			{$k->getCompany()->getName()}</pre>";
+		}
+		echo "<br>";
+		echo "<h3>Aufgabenbeschreibung:</h3>";
 		echo '<div class="recommendations-wrapper">';
-		echo '<div class="recommendation">';
-		
-		echo "<pre>{$text}</pre>";
-		
-		echo '</div></div>';
+			echo '<div class="recommendation">';
+			echo "<pre>{$text}</pre>";
+			echo "</div>"; 
+		echo "</div>";
 		?>
 		<br>
 		
@@ -77,36 +80,71 @@
     	?>
     </div>
     <?php 
-    	if ($type == "task" && !$k->getStatus()) {
+    	if ($type == "task" && $k->getStatus() == 0) {
     		echo '<div class="ccbox mainwrapper">';
-			echo "<h2><strong>Deine Lösung</strong></h2>";
-    		echo "<form method='post' id='solution-form'>";
-	    		echo "<textarea name='solution' rows='5' cols='51'></textarea>";
-	    		echo "<br>";
-	    		echo "<button type='submit' form='solution-form'>Aufgabe abschließen</button>";
-	    	echo "</form>";
-	    }
-   	 echo "</div>";
-    ?>
-</div>    
-    <?php 
-    	if (isset($this->reccs)) {
-	   		echo '<div class="rec-div ccbox mainwrapper">';
-	    	echo "<h2><strong>Empfehlungen</strong></h2>";
-	    	foreach ($this->reccs as $r) {
-				echo "<h3  style='float:left;'>Wertigkeit: {$r["score"]}</h3><h3 style='float:right;' class='usesolution'>Diese Lösung verwenden</h3>";
-				echo "<div data-id='{$r["id"]}' class='recommendation'><p>{$r["description"]}</p></div>";
-			}		
-			echo "<div class='overlay unbreakable' style='display:none;'>";
-				echo "<div class='ccbox mainwrapper'>";
-				echo "<h2><strong>Wird bearbeitet..</strong></h2>";
+				echo "<h2><strong>Deine Lösung</strong></h2>";
+	    		echo "<form method='post' id='solution-form'>";
+		    		echo "<textarea name='solution' rows='5' cols='51'></textarea>";
+		    		echo "<button type='submit' form='solution-form'>Aufgabe abschließen</button>";
+		    	echo "</form>";
+	    	echo "</div>";
+	    	
+	    } else if ($this->reviewItem) {
+			echo '<div class="ccbox mainwrapper">';
+				echo "<h2><strong>Bewertung</strong></h2>";
+				echo "<h3>Lösung akzeptieren und Aufgabe abschließen</h3>";
+				echo "<form method='post' id='accept-form'>";
+					echo "<input hidden name='status' value='accept'>";
+					echo "<button type='submit' form='accept-form'>Annehmen</button>";
+				echo "</form>";
+				
+				echo "<br><br>";
+
+				echo "<h3>Ablehnen, mit Begründung zurück zum Entwickler</h3>";
+				echo "<form method='post' id='decline-form'>";
+					echo "<input hidden name='status' value='decline'>";
+					echo "<textarea name='problems' rows='5' cols='51'></textarea>";
+					echo "<button type='submit' form='decline-form'>Ablehnen</button>";
+				echo "</form>";				
 			echo "</div>";
-		echo "</div>";
 		}
-		
+   	 echo "</div>";
+		/*
+		 * LÖSUNG ANZEIGEN 
+		 */	
     	if (isset($this->solution)) {
 	   		echo '<div class="rec-div ccbox mainwrapper">';
 	    	echo "<h2><strong>Lösung</strong></h2>";
 			echo "<div class='solution'><pre>{$this->solution}</pre></div>";
+			echo "<br><br><br>";
+			echo "<p class='small'>Bearbeitet am {$k->getSolutiondate()->format("d.m.Y")} von {$k->getAssignee()->getFullname()}</p>";
+			echo "</div>";
+		}
+		
+		/*
+		 * LOGIK FÜR EMPFEHLUNGEN
+		 */
+    	if (isset($this->reccs)) {
+	   		echo '<div class="rec-div ccbox mainwrapper">';
+		    	echo "<h2><strong>Empfehlungen</strong></h2>";
+		    	foreach ($this->reccs as $r) {
+					echo "<h3  style='float:left;'>Wertigkeit: {$r["score"]}</h3><h3 style='float:right;' class='usesolution'>Diese Lösung verwenden</h3>";
+					echo "<div data-id='{$r["id"]}' class='recommendation'><p>{$r["description"]}</p></div>";
+				}		
+			echo "</div>";
+		}			
+		echo "<div class='overlay unbreakable' style='display:none;'>";
+			echo "<div class='ccbox mainwrapper'>";
+			echo "<h2><strong>Wird bearbeitet..</strong></h2>";
+			echo "</div>";
+		echo "</div>";
+		
+		
+    	if (isset($this->problems)) {
+	   		echo '<div class="rec-div ccbox mainwrapper">';
+	    		echo "<h2><strong>Probleme</strong></h2>";
+				echo "<div class='solution'><pre>{$this->problems}</pre></div>";
+			echo "</div>";
 		}
 	?>
+</div>    

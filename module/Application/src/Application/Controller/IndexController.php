@@ -46,31 +46,62 @@ class IndexController extends AbstractActionController
     	
     	$myOpenTasks = $em->getRepository('\Application\Entity\User')->getOpenTasksCount($user->getId());
     	
+    	$myPendingTasks = $em->getRepository('\Application\Entity\User')->getPendingTasksCount($user->getId());
+
+    	$myReviewTasks = $em->getRepository('\Application\Entity\User')->getReviewTasksCount($user->getId());
+    	 
     	$isProjectManager = $user->getLevel();
     	
-        return new ViewModel(["currentPosts" => $count, "preview" => $recentPosts,
-			"openTasks" => $openTasks, "myOpenTasks" => $myOpenTasks, "projectManager" => $isProjectManager ]);
+        return new ViewModel(["currentPosts" => $count, "preview" => $recentPosts, "myPendingTasks" => $myPendingTasks,
+			"openTasks" => $openTasks, "myOpenTasks" => $myOpenTasks, "myReviewTasks" => $myReviewTasks,
+        		 "projectManager" => $isProjectManager ]);
     }
     
     public function itemAction() 
     {
     	$em = $this->getServiceLocator()->get('doctrine.entitymanager.orm_default');
     	$values = array();
+    	$user = $em->find('\Application\Entity\User', $_SESSION["userId"]);
     	
     	if (strpos($this->getRequest()->getHeader('referer'), "/results")) {
     		$values["ref"] = "true";
     	}
-    	
+
     	if ($this->getRequest()->isPost())
     	{
     		$ferrors = array();
     		$solution = $this->getRequest()->getPost()->solution;
     		$task = $em->getRepository('Application\Entity\Task')->findOneBy(array('id' => $this->params()->fromRoute('id')));
     		
+    		// Kommt von Projektmanager: Lösung akzeptieren oder ablehnen
+    		if ($this->getRequest()->getPost()->status) {
+    			if ($this->getRequest()->getPost()->status == "decline") {
+    				$task->setStatus(0);
+    				$task->setProblems($this->getRequest()->getPost()->problems);
+    			} else {
+    				$task->setStatus(1);
+    			}
+    			$em->flush();
+    			return $this->redirect()->toRoute('my-open-tasks');
+    		}
+    		
+    		if ($this->getRequest()->getPost()->useExistingSolution) {
+    			$solId = $this->getRequest()->getPost()->solution;
+    			$solItem = $em->getRepository('Application\Entity\Task')->find($solId);
+    			
+    			if ($solItem) {
+    				$solution = $solItem->getSolution();
+    			} else {
+    				$solItem = $em->getRepository('Application\Entity\Knowledge')->find($solId);
+    				$solution = $solItem->getContent();
+    			}
+    		}
+    		
     		if ($solution !== "") 
     		{
     			$task->setSolution($solution);
-    			$task->setStatus(1);
+    			$task->setStatus(2);
+    			$task->setSolutionDate(new \DateTime("now"));
     			$em->flush();
     			return $this->redirect()->toRoute('my-open-tasks');
     		} else {
@@ -81,6 +112,7 @@ class IndexController extends AbstractActionController
     	
     	if ( $em->getRepository('Application\Entity\Knowledge')->find($this->params()->fromRoute('id')) ) {
     		$item = $em->getRepository('Application\Entity\Knowledge')->find($this->params()->fromRoute('id'));
+
     		$values["item"] = $item;
     	} else {
     		// DIES IST EIN TASK!
@@ -95,9 +127,16 @@ class IndexController extends AbstractActionController
 					$tags[] = $tagText;
 				}
 			}
-    		$_SESSION["openTasks"] = true;
-			
-			if ($item->getStatus()) {
+    		$_SESSION["openTasks"] = true;    		
+    		if ($item->getStatus() == 2 && $item->getAuthor() == $user ) {
+    			$values["reviewItem"] = "blaaa";
+    		}
+    		
+    		if ($item->getProblems() !== null) {
+    			$values["problems"] = $item->getProblems();
+    		}
+    		
+			if ($item->getStatus() > 0) {
 				$values["solution"] = $item->getSolution();
 				
 			} else {
@@ -270,7 +309,13 @@ class IndexController extends AbstractActionController
     	$em = $this->getServiceLocator()->get('doctrine.entitymanager.orm_default');
     	$user = $em->find('\Application\Entity\User', $_SESSION["userId"]);
     	 
-    	$tasks = $em->getRepository('\Application\Entity\User')->getOpenTasks($user->getId());
+
+    	if ($user->getLevel() == 1) {
+    		$tasks = $em->getRepository('\Application\Entity\User')->getReviewTasks($user->getId());
+    		
+    	} else {    	 
+    		$tasks = $em->getRepository('\Application\Entity\User')->getOpenTasks($user->getId());
+    	}
     	
     	return new ViewModel(["myTasks" => $tasks]);
     }

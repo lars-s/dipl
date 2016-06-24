@@ -3,6 +3,8 @@
 	$recentPostsPreview = $this->preview;
 	$currentOpenTasksNumber = $this->openTasks;
 	$myOpenTasks = $this->myOpenTasks;
+	$myPendingTasks = $this->myPendingTasks;
+	$myReviewTasks = $this->myReviewTasks;
 ?>
 
 <div class="wrapp index">
@@ -26,14 +28,23 @@
 	?>
 	
 	<?php 
-	if ($myOpenTasks > 0) {
+	if ($myOpenTasks > 0 || $myPendingTasks > 0 || $myReviewTasks > 0) {
 
 	echo '<div class="linkbox" data-link="' . $this->url("my-open-tasks"). '">';
 		echo "<h3>Offene Aufgaben</h3>";
 		
 		echo "<p>  <br> <strong>Du hast offene Aufgaben!</strong></p>";
 		echo "<br><br>";
-		echo "<p>Offene Aufgaben: <strong>" . $myOpenTasks . "</strong></p>";
+		if ($myOpenTasks) {
+			echo "<p>Ungelöste Aufgaben: <strong>{$myOpenTasks}</strong></p><br>";
+		}	
+		if ($myPendingTasks) {
+			echo "<p>Erwartet Rückmeldung: <strong>{$myPendingTasks}</strong></p>";
+		}	
+		if ($myReviewTasks) {
+			echo "<p>Erwartet Abnahme: <strong>{$myReviewTasks}</strong></p>";
+		}	
+		
 	echo "</div>";
 	}
 	?>

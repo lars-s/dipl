@@ -122,5 +122,21 @@ $("div.overlay").on("click", function() {
 
 $(".usesolution").on("click", function() {
 	$(".overlay").show();
-	console.log($(this).next(".recommendation").data("id"));
+	$("#solution-form textarea").val("blaaaaaa");
+	var id = $(this).next(".recommendation").data("id");
+	
+	$.ajax({
+		url: "",
+		data: {solution: id, useExistingSolution: true},
+		method: "POST",
+		success: function(data) {
+			window.location.href = "../my-open-tasks";	
+		}
+	})
+})
+$("form#decline-form button").on("click", function() {
+	console.log("dec");
+})
+$("form#accept-form button").on("click", function() {
+	console.log("accept");
 })

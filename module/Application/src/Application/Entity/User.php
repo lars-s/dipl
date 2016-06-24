@@ -143,18 +143,41 @@ class User {
 Class UserRepository extends EntityRepository 
 {
 	public function getOpenTasks($user) {
-		$q = $this->_em->createQuery('SELECT t FROM \Application\Entity\Task t WHERE t.status = 0
+		$q = $this->_em->createQuery('SELECT t FROM \Application\Entity\Task t WHERE t.status IN(2,0)
 				AND t.assignee = :var')
-		->setParameter("var", "$user");
+			->setParameter("var", "$user");
+		
 		return $q->getResult();
 	}
 	
+	public function getReviewTasks($user) {
+		$q = $this->_em->createQuery('SELECT t FROM \Application\Entity\Task t WHERE t.status = 2
+				AND t.author = :var')
+				->setParameter("var", "$user");
+		
+		return $q->getResult();
+	}
 	public function getOpenTasksCount($user) {
 		$q = $this->_em->createQuery('SELECT count(t) FROM \Application\Entity\Task t WHERE t.status = 0
 				AND t.assignee = :var')
 		->setParameter("var", "$user");
 		return $q->getSingleScalarResult();
 	}
+	
+	public function getPendingTasksCount($user) {
+		$q = $this->_em->createQuery('SELECT count(t) FROM \Application\Entity\Task t WHERE t.status = 2
+				AND t.assignee = :var')
+		->setParameter("var", "$user");
+		return $q->getSingleScalarResult();
+	}
+	
+	public function getReviewTasksCount($user) {
+		$q = $this->_em->createQuery('SELECT count(t) FROM \Application\Entity\Task t WHERE t.status = 2
+				AND t.author = :var')
+					->setParameter("var", "$user");
+		return $q->getSingleScalarResult();
+	}
+	
 
 	public function getRecommendationForAssignment($tech, $comp, $tags) {
 		$q = $this->_em->createQuery('SELECT u FROM \Application\Entity\User u WHERE u.level = 0');

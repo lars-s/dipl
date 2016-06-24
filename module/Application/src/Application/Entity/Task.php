@@ -27,6 +27,16 @@ class Task extends KnowledgeSuperclass {
 	protected $solution;
 	
 	/**
+	 * @ORM\Column(nullable=true, length=2000)
+	 */
+	protected $problems;
+	
+	/**
+	 * @ORM\Column(name="solutionDate", type="datetime", nullable=true)
+	 */
+	protected $solutionDate;
+	
+	/**
 	 * @ORM\ManyToOne(targetEntity="User")
 	 * @ORM\JoinColumn(name="assignee", referencedColumnName="id")
 	 */
@@ -60,12 +70,31 @@ class Task extends KnowledgeSuperclass {
 	}
 
 	public function getStatusText() {
+		if ($this->status == 0 && $this->problems != null) {
+			return "nacharbeiten";
+		}
 		if ($this->status == 0) {
 			return "offen";
 		} else if ($this->status == 2) {
-			return "erwartet Bestägigung";
+			return "wartet auf Abnahme";
 		}
 	}
+	public function getSolutionDate() {
+		return $this->solutionDate;
+	}
+
+	public function setSolutionDate($solutionDate) {
+		$this->solutionDate = $solutionDate;
+	}
+	public function getProblems() {
+		return $this->problems;
+	}
+
+	public function setProblems($problems) {
+		$this->problems = $problems;
+	}
+
+
 
 }
 
