@@ -106,6 +106,7 @@ function getRecommendationForAssignee(technology, company, tags) {
 
 $(".rec-list").on("click", "ul", function() {
 	var id = $(this).data("id");
+	$("select[name='assignee']").focus();
 	$("select[name='assignee'] option[value='" + id + "'").prop("selected", true);
 })
 
@@ -114,7 +115,7 @@ $("select.comp, select.tech, input.taginputs").on("change", function() {
 	foo();
 })
 
-$("div.overlay").on("click", function() {
+$("body").on("click", "div.overlay", function() {
 	if (!$(this).hasClass("unbreakable")) {
 		$(this).remove();	
 	}
@@ -122,7 +123,7 @@ $("div.overlay").on("click", function() {
 
 $(".usesolution").on("click", function() {
 	$(".overlay").show();
-	$("#solution-form textarea").val("blaaaaaa");
+	$("#solution-form textarea").val("..");
 	var id = $(this).next(".recommendation").data("id");
 	
 	$.ajax({
@@ -134,9 +135,58 @@ $(".usesolution").on("click", function() {
 		}
 	})
 })
-$("form#decline-form button").on("click", function() {
-	console.log("dec");
+
+$("form#decline-form").on("submit", function(e) {
+	var errorOverlay = "<div class='overlay'><div class='ccbox mainwrapper'><span class='close'>X</span>" ;
+
+	if ($("textarea[name='problems']").val() == "") {
+		e.preventDefault();
+		$("textarea[name='problems']").addClass("error");
+		errorOverlay += "<h2>Bitte eine Begründung eingeben!</h2>";
+	}
+	
+	errorOverlay += "</div></div>";
+	$("body").append(errorOverlay);
 })
-$("form#accept-form button").on("click", function() {
-	console.log("accept");
+
+$("form#solution-form").on("submit", function(e) {
+	var errorOverlay = "<div class='overlay'><div class='ccbox mainwrapper'><span class='close'>X</span>" ;
+
+	if ($("textarea[name='solution']").val() == "") {
+		e.preventDefault();
+		$("textarea[name='solution']").addClass("error");
+		errorOverlay += "<h2>Bitte eine Lösung eingeben!</h2>";
+	}
+	
+	errorOverlay += "</div></div>";
+	$("body").append(errorOverlay);
+})
+
+$("form#new").on("submit", function(e) {
+	var errorOverlay = "<div class='overlay'><div class='ccbox mainwrapper'><span class='close'>X</span>" ;
+	
+	if ($("select[name='assignee'] option:selected").val() == -1) {
+		e.preventDefault();
+		$("select[name='assignee']").addClass("error");
+		errorOverlay += "<h2>Bitte einen Mitarbeiter zuweisen!</h2>";
+	}
+	
+	if ($("textarea[name='content']").val() == "") {
+		e.preventDefault();
+		$("textarea[name='content']").addClass("error");
+		errorOverlay += "<h2>Bitte eine Beschreibung eingeben!</h2>";
+	}
+	
+	if ($("input[name='tags']").val() == "") {
+		e.preventDefault();
+		$("input[name='tags']").addClass("error");
+		errorOverlay += "<h2>Bitte Tags angeben!</h2>";
+	}
+	
+	errorOverlay += "</div></div>";
+	$("body").append(errorOverlay);
+})
+
+$("body").on("focus" ,".error", function() {
+	$(this).removeClass("error");
 })

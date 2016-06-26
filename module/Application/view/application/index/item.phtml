@@ -8,18 +8,9 @@
 	}
 	
 	$text = $k->getDescription();
-	
-	$ferrors = $this->formErrors;
 ?>
 <div class="wrapp opentask">
-	<?php 
-	if ($ferrors) 
-	{
-		foreach ($ferrors as $error) {
-			echo "<p class='error'>{$error}</p>";
-		}
-	}             
-	   
+	<?php  
 	if (isset($_SESSION["searchQuery"]) && isset($this->ref)) 
     { 
         echo "<form class='backresults' method='POST' action='../results'>";

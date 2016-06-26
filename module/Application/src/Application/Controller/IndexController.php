@@ -69,7 +69,6 @@ class IndexController extends AbstractActionController
 
     	if ($this->getRequest()->isPost())
     	{
-    		$ferrors = array();
     		$solution = $this->getRequest()->getPost()->solution;
     		$task = $em->getRepository('Application\Entity\Task')->findOneBy(array('id' => $this->params()->fromRoute('id')));
     		
@@ -104,10 +103,7 @@ class IndexController extends AbstractActionController
     			$task->setSolutionDate(new \DateTime("now"));
     			$em->flush();
     			return $this->redirect()->toRoute('my-open-tasks');
-    		} else {
-    			$ferrors[] = "Leerer Lösungstext!";
     		}
-    		$values["formErrors"] = $ferrors;
     	}
     	
     	if ( $em->getRepository('Application\Entity\Knowledge')->find($this->params()->fromRoute('id')) ) {

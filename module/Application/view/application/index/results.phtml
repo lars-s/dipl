@@ -12,8 +12,8 @@
 
 <?php 
 if ($cTech) {
-    echo "<div class='ccbox mainwrapper'>";
-    	echo "<h2>Ergebnisse für '<strong>" . $tech->getName() . "'</strong></h2>";
+    echo "<div class='ccbox mainwrapper' style='margin-bottom:5px;'>";
+    	echo "<h2>Einträge für die Technologie '<strong>{$tech->getName()}</strong>'</h2>";
       	
       	foreach($techItems as $k) {
 				echo "<div data-link='" . $this->url('item', array('id' => $k->getId())) . "' class='recommendations-wrapper left'>";
@@ -31,11 +31,7 @@ if ($cTech) {
 <?php 
 if ($cTag) {
     echo "<div class='ccbox mainwrapper'>";
-    	echo "<h2><strong>Ergebnisse</strong></h2>";
-    	echo "<ul class='nav nav-tabs' role='tablist'>";
-	        echo "<li class='active'><a href='#'>" . $tag->getName() .  "</a></li>";
-      	echo "</ul>";
-      	
+    	echo "<h2>Einträge mit dem Tag '<strong>{$tag->getName()}</strong>'</h2>";
       	foreach($tagItems as $k) {
 			echo "<div data-link='" . $this->url('item', array('id' => $k->getId())) . "' class='recommendations-wrapper left'>";
 			echo "<div class='recommendation'>";
