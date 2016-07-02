@@ -190,3 +190,15 @@ $("form#new").on("submit", function(e) {
 $("body").on("focus" ,".error", function() {
 	$(this).removeClass("error");
 })
+
+$("span.favorite").on("click", function() {
+	$.ajax({
+		url: "",
+		data: {favorite: $(this).hasClass("true")},
+		method: "POST",
+		success: function(data) {
+			$("span.favorite").toggleClass("true");
+			$("span.favorite").toggleClass("false");
+		}
+	})
+})

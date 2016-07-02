@@ -83,6 +83,11 @@ class KnowledgeSuperclass {
 		$this->updated = new \DateTime("now");
 		$this->tags = new ArrayCollection();
 	}
+	
+	public function toString() {
+		return "{$this->id}";
+	}
+	
 	/**
 	 * @return the $company
 	 */

@@ -419,3 +419,19 @@ div.wrapp.opentask > div textarea {
 	opacity: 0.9;
 	text-shadow: none;
 }
+
+span.favorite {
+	padding: 10px;
+	cursor: pointer;
+}
+
+span.favorite.true {
+	background: transparent url("../img/favorite-true.png") no-repeat center center;
+	background-size: contain;	
+	
+}
+
+span.favorite.false {
+	background: transparent url("../img/favorite-false.png") no-repeat center center;
+	background-size: contain;	
+}

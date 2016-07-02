@@ -40,7 +40,7 @@ class IndexController extends AbstractActionController
 
     	$count = $em->getRepository('\Application\Entity\Knowledge')->getTotalNumberOfElements();
     	
-    	$recentPosts = $em->getRepository('\Application\Entity\Knowledge')->getMostRecentElements(3);
+    	$recentPosts = $user->getFavorites();
     	
     	$openTasks = $em->getRepository('\Application\Entity\Task')->getNumberOfOpenTasks();
     	
@@ -63,9 +63,32 @@ class IndexController extends AbstractActionController
     	$values = array();
     	$user = $em->find('\Application\Entity\User', $_SESSION["userId"]);
     	
+    	if (isset($this->getRequest()->getPost()->favorite)) {
+    		$status = $this->getRequest()->getPost()->favorite;
+    		if ( $em->getRepository('Application\Entity\Knowledge')->find($this->params()->fromRoute('id')) ) {
+    			$item = $em->getRepository('Application\Entity\Knowledge')->find($this->params()->fromRoute('id'));
+    		} else {
+    			$item = $em->getRepository('Application\Entity\Task')->find($this->params()->fromRoute('id'));
+    		}
+    		if ($status == "true") {
+    			$user->removeFavorites($item);
+    			$s = "Favorit entfernt";
+    		} else {
+    			$user->addFavorites($item);
+    			$s = "Favorit hinzugefügt";
+    		}
+    		
+    		$em->flush();
+    		
+    		return new JsonModel(["success" => $s]);
+    	}
+    	
+    	
     	if (strpos($this->getRequest()->getHeader('referer'), "/results")) {
     		$values["ref"] = "true";
     	}
+    	
+    	$values["user"] = $user;
 
     	if ($this->getRequest()->isPost())
     	{
@@ -122,10 +145,10 @@ class IndexController extends AbstractActionController
 				if ($tagText !== "") {
 					$tags[] = $tagText;
 				}
-			}
-    		$_SESSION["openTasks"] = true;    		
-    		if ($item->getStatus() == 2 && $item->getAuthor() == $user ) {
-    			$values["reviewItem"] = "blaaa";
+			}	
+    		if ($item->getStatus() == 0 && $item->getAssignee() == $user ) {
+    			
+    		$_SESSION["openTasks"] = true;    	$values["reviewItem"] = "blaaa";
     		}
     		
     		if ($item->getProblems() !== null) {

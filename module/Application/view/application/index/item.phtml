@@ -8,6 +8,12 @@
 	}
 	
 	$text = $k->getDescription();
+	$user = $this->user;
+
+	$fav = "false";
+	foreach ($user->getFavorites()->toArray() as $key => $value) {
+		$value->toString() != $k->getId() ?: $fav = "true";
+	}
 ?>
 <div class="wrapp opentask">
 	<?php  
@@ -18,11 +24,11 @@
     }
 	?>
 
-
-    <div style="margin-bottom:20px;" class="ccbox mainwrapper">
-    	
-    	
-    	<h2><strong><?=$type=="task" ? "Aufgabenstellung" : "Wissen"?></strong></h2>
+    <div style="margin-bottom:20px;" class="ccbox mainwrapper">    	
+    	<h2>
+    		<strong><?=$type=="task" ? "Aufgabenstellung" : "Wissen"?></strong>
+    		<span class='favorite <?=$fav ?>'></span>
+    	</h2>
  		<?php 
     	if (null !== $k->getTechnology()) {
 			echo "<pre>Technologie: 	{$k->getTechnology()->getName()}</pre>";

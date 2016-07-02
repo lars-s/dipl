@@ -76,11 +76,20 @@ class User {
 	 */
 	protected $contributions;
 	
+	/**
+	 * @ORM\ManyToMany(targetEntity="KnowledgeSuperclass")
+	 * @ORM\JoinTable(name="users_favorites"),
+	 * 		joinColumns={@ORM\JoinColumn(name="user_id", referencedColumnName="id")},
+	 * 		inverseJoinColumns={@ORM\JoinColumn(name="knowledge_id", referencedColumnName="id", unique=false)}
+	 */
+	protected $favorites;
+	
 	public function __construct() {
 		$this->created = new \DateTime("now");
 		$this->updated = new \DateTime("now");
 		$this->assignedTasks = new ArrayCollection();
 		$this->contributions = new ArrayCollection();
+		$this->favorites = new ArrayCollection();
 	}
 	
 	public function getId() {
@@ -137,7 +146,17 @@ class User {
 	public function setLevel($level) {
 		$this->level = $level;
 	}
+	public function getFavorites() {
+		return $this->favorites;
+	}
 
+	public function addFavorites($favorites) {
+		$this->favorites->add($favorites);
+	}
+
+	public function removeFavorites($favorites) {
+		$this->favorites->removeElement($favorites);
+	}
 }
 
 Class UserRepository extends EntityRepository 

@@ -64,10 +64,10 @@ class User extends \Application\Entity\User implements \Doctrine\ORM\Proxy\Proxy
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return array('__isInitialized__', 'id', 'firstname', 'lastname', 'assignedTasks', 'level', 'created', 'updated', 'contributions');
+            return array('__isInitialized__', 'id', 'firstname', 'lastname', 'assignedTasks', 'level', 'created', 'updated', 'contributions', 'favorites');
         }
 
-        return array('__isInitialized__', 'id', 'firstname', 'lastname', 'assignedTasks', 'level', 'created', 'updated', 'contributions');
+        return array('__isInitialized__', 'id', 'firstname', 'lastname', 'assignedTasks', 'level', 'created', 'updated', 'contributions', 'favorites');
     }
 
     /**
@@ -329,6 +329,39 @@ class User extends \Application\Entity\User implements \Doctrine\ORM\Proxy\Proxy
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'setLevel', array($level));
 
         return parent::setLevel($level);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getFavorites()
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getFavorites', array());
+
+        return parent::getFavorites();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function addFavorites($favorites)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'addFavorites', array($favorites));
+
+        return parent::addFavorites($favorites);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function removeFavorites($favorites)
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'removeFavorites', array($favorites));
+
+        return parent::removeFavorites($favorites);
     }
 
 }
