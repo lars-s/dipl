@@ -147,8 +147,12 @@ class IndexController extends AbstractActionController
 				}
 			}	
     		if ($item->getStatus() == 0 && $item->getAssignee() == $user ) {
-    			
-    		$_SESSION["openTasks"] = true;    	$values["reviewItem"] = "blaaa";
+	    		$_SESSION["openTasks"] = true;    	
+    		}
+    		
+    		if ($item->getStatus() == 2 && $item->getAuthor() == $user ) {
+	    		$values["reviewItem"] = "blaaa";
+	    		$_SESSION["openTasks"] = true;    	
     		}
     		
     		if ($item->getProblems() !== null) {
