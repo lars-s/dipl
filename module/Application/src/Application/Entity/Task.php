@@ -32,6 +32,11 @@ class Task extends KnowledgeSuperclass {
 	protected $problems;
 	
 	/**
+	 * @ORM\Column(name="problemsDate", type="datetime", nullable=true)
+	 */
+	protected $problemsDate;
+	
+	/**
 	 * @ORM\Column(name="solutionDate", type="datetime", nullable=true)
 	 */
 	protected $solutionDate;
@@ -93,6 +98,14 @@ class Task extends KnowledgeSuperclass {
 	public function setProblems($problems) {
 		$this->problems = $problems;
 	}
+	public function getProblemsDate() {
+		return $this->problemsDate;
+	}
+
+	public function setProblemsDate($problemsDate) {
+		$this->problemsDate = $problemsDate;
+	}
+
 
 
 

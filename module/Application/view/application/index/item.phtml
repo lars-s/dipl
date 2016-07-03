@@ -136,11 +136,15 @@
 			echo "</div>";
 		echo "</div>";
 		
-		
+		/*
+		 * PROBLEME ANZEIGEN
+		 */
     	if (isset($this->problems)) {
 	   		echo '<div class="rec-div ccbox mainwrapper">';
 	    		echo "<h2><strong>Probleme</strong></h2>";
 				echo "<div class='solution'><pre>{$this->problems}</pre></div>";
+				echo "<p class='small'>Kommentiert am " . $k->getProblemsDate()->format("d.m.Y H:i")
+				. " von {$k->getAuthor()->getFullname()}</p>";
 			echo "</div>";
 		}
 	?>

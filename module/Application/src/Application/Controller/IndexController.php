@@ -100,6 +100,7 @@ class IndexController extends AbstractActionController
     			if ($this->getRequest()->getPost()->status == "decline") {
     				$task->setStatus(0);
     				$task->setProblems($this->getRequest()->getPost()->problems);
+    				$task->setProblemsDate(new \DateTime("now"));
     			} else {
     				$task->setStatus(1);
     			}
